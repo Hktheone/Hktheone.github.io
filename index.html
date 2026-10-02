@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hassnain Ali — Full Stack Developer</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg-alt: #161b22;
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --accent: #58a6ff;
+    --accent-2: #3fb950;
+    --border: #30363d;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  header {
+    padding: 80px 20px 60px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+  header p.role { color: var(--accent); font-size: 1.2rem; margin-bottom: 20px; }
+  header p.tagline { color: var(--text-dim); max-width: 600px; margin: 0 auto 25px; }
+  .contact-links { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+  .contact-links a {
+    color: var(--text);
+    text-decoration: none;
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: 0.2s;
+  }
+  .contact-links a:hover { border-color: var(--accent); color: var(--accent); }
+
+  section { max-width: 900px; margin: 0 auto; padding: 60px 20px; }
+  section h2 {
+    font-size: 1.6rem;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  section h2::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  .skill-card {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+  }
+  .skill-card h3 { color: var(--accent); font-size: 0.95rem; margin-bottom: 10px; }
+  .skill-card p { color: var(--text-dim); font-size: 0.9rem; }
+
+  .job {
+    margin-bottom: 40px;
+    padding-left: 20px;
+    border-left: 2px solid var(--border);
+    position: relative;
+  }
+  .job::before {
+    content: '';
+    position: absolute;
+    left: -7px;
+    top: 4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .job-header { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 5px; }
+  .job-title { font-size: 1.1rem; font-weight: 600; }
+  .job-date { color: var(--text-dim); font-size: 0.85rem; }
+  .job-company { color: var(--accent); font-size: 0.95rem; margin-bottom: 10px; }
+  .job-desc { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 10px; }
+  .job ul { list-style: none; }
+  .job li {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    padding-left: 18px;
+    position: relative;
+    margin-bottom: 6px;
+  }
+  .job li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+  }
+  .project-card {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 25px;
+    transition: 0.2s;
+  }
+  .project-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+  .project-card h3 { font-size: 1.1rem; margin-bottom: 8px; }
+  .project-card .tech {
+    color: var(--accent-2);
+    font-size: 0.8rem;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .project-card p { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 15px; }
+  .project-card a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+  .project-card a:hover { text-decoration: underline; }
+
+  .cert-list { display: flex; flex-direction: column; gap: 12px; }
+  .cert-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .cert-item .name { font-size: 0.95rem; }
+  .cert-item .issuer { color: var(--text-dim); font-size: 0.85rem; }
+
+  footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.9rem; }
+    .job-header { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Hassnain Ali</h1>
+  <p class="role">Full Stack Developer — Java &amp; Angular</p>
+  <p class="tagline">~5 years of enterprise experience building secure, scalable systems across government-adjacent logistics, customs, and large enterprise platforms in Qatar and Pakistan. Available for relocation with visa sponsorship.</p>
+  <div class="contact-links">
+    <a href="mailto:khasnainali@gmail.com">Email</a>
+    <a href="tel:+97472257091">+974 72257091</a>
+    <a href="https://linkedin.com/in/hassnain-ali-4b398717a" target="_blank">LinkedIn</a>
+    <a href="https://github.com/Hktheone" target="_blank">GitHub</a>
+  </div>
+</header>
+
+<section id="skills">
+  <h2>Technical Skills</h2>
+  <div class="skills-grid">
+    <div class="skill-card">
+      <h3>Languages &amp; Core</h3>
+      <p>Java (8, 11, 17), TypeScript, JavaScript, Python</p>
+    </div>
+    <div class="skill-card">
+      <h3>Backend</h3>
+      <p>Spring Boot, Spring, Spring Cloud, Spring Security, Hibernate, JPA, REST, gRPC, J2EE, WebFlux</p>
+    </div>
+    <div class="skill-card">
+      <h3>Frontend</h3>
+      <p>Angular (2–16), AngularJS, PrimeNG, RxJS, Angular Material</p>
+    </div>
+    <div class="skill-card">
+      <h3>Data &amp; Infra</h3>
+      <p>PostgreSQL, MySQL, Oracle, Docker, AWS, Kafka, CI/CD</p>
+    </div>
+    <div class="skill-card">
+      <h3>Testing</h3>
+      <p>Jasmine, Karma, Jest, Playwright</p>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <h2>Experience</h2>
+
+  <div class="job">
+    <div class="job-header">
+      <span class="job-title">Full Stack Developer</span>
+      <span class="job-date">Sep 2025 – Present</span>
+    </div>
+    <div class="job-company">General Authority of Customs (GAQ) · Malomatia, Doha</div>
+    <div class="job-desc">Government customs clearance &amp; cargo tracking platform.</div>
+    <ul>
+      <li>Built RESTful APIs in Java EE (Servlet/JSP, JAX-RS/Jersey) for cargo tracking, document processing, and clearance workflows</li>
+      <li>Reduced query execution times by 20% via optimized Hibernate/JPA persistence on Oracle</li>
+      <li>Built role-based Angular UIs with JWT auth, improving navigation efficiency by 20%</li>
+      <li>Modernized legacy modules with new API interfaces, reducing manual intervention</li>
+    </ul>
+  </div>
+
+  <div class="job">
+    <div class="job-header">
+      <span class="job-title">Software Developer</span>
+      <span class="job-date">Sep 2022 – Sep 2025</span>
+    </div>
+    <div class="job-company">Contour (Constellation) Software · Karachi — iMetal (Jonas Metals UK)</div>
+    <div class="job-desc">Metal industry ERP system for Jonas Metals UK.</div>
+    <ul>
+      <li>Built microservices with Spring Boot, Spring Cloud (Eureka), API Gateway, and Load Balancer</li>
+      <li>Implemented REST and gRPC APIs; used Kafka and ReactiveFeign for service communication</li>
+      <li>Secured services with Spring Security + JWT, role-based authorization</li>
+      <li>Developed Angular (2–16) SPAs with PrimeNG, RxJS Signals, lazy loading, and AOT compilation</li>
+      <li>Wrote unit/E2E tests with Jasmine, Karma, Jest, and Playwright</li>
+    </ul>
+  </div>
+
+  <div class="job">
+    <div class="job-header">
+      <span class="job-title">DevOps Trainee</span>
+      <span class="job-date">Mar 2022 – Jul 2022</span>
+    </div>
+    <div class="job-company">SkipQ, Islamabad (Remote)</div>
+    <ul>
+      <li>Designed scalable cloud infrastructure using AWS Lambda, S3, CloudFormation, and CloudWatch</li>
+      <li>Automated deployments and workflows using Infrastructure as Code (IaC)</li>
+    </ul>
+  </div>
+</section>
+
+<section id="projects">
+  <h2>Personal Projects</h2>
+  <div class="projects-grid">
+    <div class="project-card">
+      <h3>Java Microservices Platform</h3>
+      <span class="tech">Java 21 · Spring Boot 3.2 · Kafka · Prometheus · Resilience4j</span>
+      <p>A resilient microservices architecture with Kafka-based event-driven communication, circuit-breaker patterns, and observability via Prometheus metrics.</p>
+      <a href="https://github.com/Hktheone/micro-service-example" target="_blank">View on GitHub →</a>
+    </div>
+    <div class="project-card">
+      <h3>Real-Time Dashboard</h3>
+      <span class="tech">Angular 17+ · TypeScript · RxJS · Signals</span>
+      <p>A real-time monitoring dashboard with signal-based state management, OnPush change detection, and live data integration.</p>
+      <a href="https://github.com/Hktheone/quake-watch" target="_blank">View on GitHub →</a>
+    </div>
+  </div>
+</section>
+
+<section id="certifications">
+  <h2>Certifications</h2>
+  <div class="cert-list">
+    <div class="cert-item">
+      <span class="name">IELTS Academic — C1 (7.5)</span>
+      <span class="issuer">British Council · Oct 2023</span>
+    </div>
+    <div class="cert-item">
+      <span class="name">Mid-Level Angular Developer</span>
+      <span class="issuer">Certificates.dev · Sep 2025</span>
+    </div>
+    <div class="cert-item">
+      <span class="name">Spring Boot and Spring Mastery</span>
+      <span class="issuer">Udemy · May 2022</span>
+    </div>
+    <div class="cert-item">
+      <span class="name">Introduction to Data Science in Python</span>
+      <span class="issuer">Coursera · Sep 2023</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 Hassnain Ali · Built with HTML/CSS/JS
+</footer>
+
+</body>
+</html>
