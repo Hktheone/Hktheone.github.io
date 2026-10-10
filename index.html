@@ -253,6 +253,12 @@
   <h2>Personal Projects</h2>
   <div class="projects-grid">
     <div class="project-card">
+      <h3>TrackFlow — Order &amp; Delivery Platform</h3>
+      <span class="tech">Java 21 · Spring Boot 4 · Spring Cloud Gateway · Eureka · Kafka (KRaft) · PostgreSQL · Angular 22 · Docker</span>
+      <p>A fully containerized, event-driven order and delivery system. Order and delivery services each own their own PostgreSQL database and communicate only through Kafka events, so a confirmed order automatically becomes a delivery and every delivery update flows back to the order. The API gateway handles routing and authentication, issuing RS256 JWTs with role-based access for admins, customers and riders, and riders are tracked live on a map. Includes idempotent consumers, dead-letter handling and after-commit event publishing, all started with a single <code>docker compose up</code>.</p>
+      <a href="https://github.com/Hktheone/TrackFlow" target="_blank">View on GitHub →</a>
+    </div>
+    <div class="project-card">
       <h3>Java Microservices Platform</h3>
       <span class="tech">Java 21 · Spring Boot 3.2 · Kafka · Prometheus · Resilience4j</span>
       <p>A resilient microservices architecture with Kafka-based event-driven communication, circuit-breaker patterns, and observability via Prometheus metrics.</p>
