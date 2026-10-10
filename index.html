@@ -4,10 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hassnain Ali — Full Stack Developer</title>
+<meta name="description" content="Hassnain Ali — Full Stack Developer (Java, Spring Boot, Angular) with ~5 years building customs, logistics and enterprise ERP platforms in Qatar and Pakistan.">
 <style>
   :root {
     --bg: #0d1117;
     --bg-alt: #161b22;
+    --bg-raised: #1c2330;
     --text: #e6edf3;
     --text-dim: #8b949e;
     --accent: #58a6ff;
@@ -15,12 +17,44 @@
     --border: #30363d;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
     font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
     background: var(--bg);
     color: var(--text);
     line-height: 1.6;
   }
+  code {
+    font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+    font-size: 0.85em;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 5px;
+  }
+
+  /* ---- top nav ---- */
+  nav.top {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(13, 17, 23, 0.9);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  nav.top ul {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 12px 20px;
+    list-style: none;
+    display: flex;
+    gap: 22px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  nav.top a { color: var(--text-dim); text-decoration: none; font-size: 0.9rem; }
+  nav.top a:hover { color: var(--accent); }
+
   header {
     padding: 80px 20px 60px;
     text-align: center;
@@ -28,7 +62,7 @@
   }
   header h1 { font-size: 2.5rem; margin-bottom: 10px; }
   header p.role { color: var(--accent); font-size: 1.2rem; margin-bottom: 20px; }
-  header p.tagline { color: var(--text-dim); max-width: 600px; margin: 0 auto 25px; }
+  header p.tagline { color: var(--text-dim); max-width: 660px; margin: 0 auto 25px; }
   .contact-links { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
   .contact-links a {
     color: var(--text);
@@ -55,7 +89,27 @@
     height: 1px;
     background: var(--border);
   }
+  .section-intro { color: var(--text-dim); margin: -12px 0 28px; font-size: 0.95rem; }
 
+  /* ---- about ---- */
+  .about p { color: var(--text-dim); margin-bottom: 14px; }
+  .about p strong { color: var(--text); font-weight: 600; }
+  .highlights {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 16px;
+    margin-top: 26px;
+  }
+  .highlight {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .highlight .big { display: block; color: var(--accent); font-size: 1.35rem; font-weight: 700; }
+  .highlight span:last-child { color: var(--text-dim); font-size: 0.85rem; }
+
+  /* ---- skills ---- */
   .skills-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -70,8 +124,9 @@
   .skill-card h3 { color: var(--accent); font-size: 0.95rem; margin-bottom: 10px; }
   .skill-card p { color: var(--text-dim); font-size: 0.9rem; }
 
+  /* ---- experience ---- */
   .job {
-    margin-bottom: 40px;
+    margin-bottom: 48px;
     padding-left: 20px;
     border-left: 2px solid var(--border);
     position: relative;
@@ -90,22 +145,52 @@
   .job-title { font-size: 1.1rem; font-weight: 600; }
   .job-date { color: var(--text-dim); font-size: 0.85rem; }
   .job-company { color: var(--accent); font-size: 0.95rem; margin-bottom: 10px; }
-  .job-desc { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 10px; }
-  .job ul { list-style: none; }
-  .job li {
+  .job-desc { color: var(--text-dim); font-size: 0.92rem; margin-bottom: 12px; }
+  .work-links { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 6px; }
+  .work-links a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.82rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 10px;
+    transition: 0.2s;
+  }
+  .work-links a:hover { border-color: var(--accent); }
+  .job h4, .project-card h4 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text);
+    margin: 16px 0 8px;
+  }
+  .job ul, .project-card ul, .edu ul { list-style: none; }
+  .job li, .project-card li, .edu li {
     color: var(--text-dim);
     font-size: 0.9rem;
     padding-left: 18px;
     position: relative;
-    margin-bottom: 6px;
+    margin-bottom: 7px;
   }
-  .job li::before {
+  .job li::before, .project-card li::before, .edu li::before {
     content: '▸';
     position: absolute;
     left: 0;
     color: var(--accent);
   }
+  .job li strong, .project-card li strong { color: var(--text); font-weight: 600; }
 
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .chip {
+    font-size: 0.75rem;
+    color: var(--accent-2);
+    border: 1px solid rgba(63, 185, 80, 0.35);
+    background: rgba(63, 185, 80, 0.08);
+    border-radius: 999px;
+    padding: 2px 10px;
+  }
+
+  /* ---- projects ---- */
   .projects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -117,8 +202,23 @@
     border-radius: 8px;
     padding: 25px;
     transition: 0.2s;
+    display: flex;
+    flex-direction: column;
   }
   .project-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+  .project-card.featured { grid-column: 1 / -1; }
+  .project-card .badge {
+    align-self: flex-start;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--accent);
+    border-radius: 4px;
+    padding: 2px 8px;
+    margin-bottom: 10px;
+  }
   .project-card h3 { font-size: 1.1rem; margin-bottom: 8px; }
   .project-card .tech {
     color: var(--accent-2);
@@ -126,14 +226,47 @@
     margin-bottom: 12px;
     display: block;
   }
-  .project-card p { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 15px; }
+  .project-card p { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 14px; }
+  .project-card h4 { margin-top: 4px; }
+  .project-card .cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 6px 28px;
+    margin-bottom: 14px;
+  }
+  .project-card .links { margin-top: auto; padding-top: 6px; display: flex; gap: 18px; flex-wrap: wrap; }
   .project-card a {
     color: var(--accent);
     text-decoration: none;
     font-size: 0.85rem;
   }
   .project-card a:hover { text-decoration: underline; }
+  .flow {
+    font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+    white-space: pre;
+    line-height: 1.5;
+  }
 
+  /* ---- education ---- */
+  .edu {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 22px 24px;
+  }
+  .edu .edu-header { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+  .edu .degree { font-size: 1.05rem; font-weight: 600; }
+  .edu .school { color: var(--accent); font-size: 0.95rem; margin-bottom: 12px; }
+
+  /* ---- certifications ---- */
   .cert-list { display: flex; flex-direction: column; gap: 12px; }
   .cert-item {
     display: flex;
@@ -148,6 +281,16 @@
   .cert-item .name { font-size: 0.95rem; }
   .cert-item .issuer { color: var(--text-dim); font-size: 0.85rem; }
 
+  /* ---- contact ---- */
+  .contact-box {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px;
+    text-align: center;
+  }
+  .contact-box p { color: var(--text-dim); margin-bottom: 20px; }
+
   footer {
     text-align: center;
     padding: 40px 20px;
@@ -158,46 +301,84 @@
 
   @media (max-width: 600px) {
     header h1 { font-size: 1.9rem; }
-    .job-header { flex-direction: column; }
+    .job-header, .edu .edu-header { flex-direction: column; }
+    nav.top ul { gap: 14px; }
   }
 </style>
 </head>
 <body>
 
+<nav class="top" aria-label="Sections">
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#certifications">Certifications</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
 <header>
   <h1>Hassnain Ali</h1>
   <p class="role">Full Stack Developer — Java &amp; Angular</p>
-  <p class="tagline">~5 years of enterprise experience building secure, scalable systems across government-adjacent logistics, customs, and large enterprise platforms in Qatar and Pakistan. Available for relocation with visa sponsorship.</p>
+  <p class="tagline">~5 years of enterprise experience in Qatar and Pakistan as a Java backend and full stack developer: building REST/gRPC APIs with Spring Boot and Java EE and Angular front ends for government customs, logistics and large enterprise platforms, including hands-on work on a Spring Boot microservices product. Based in Doha, available for immediate relocation with visa sponsorship.</p>
   <div class="contact-links">
     <a href="mailto:khasnainali@gmail.com">Email</a>
     <a href="tel:+97472257091">+974 72257091</a>
-    <a href="https://linkedin.com/in/hassnain-ali-4b398717a" target="_blank">LinkedIn</a>
-    <a href="https://github.com/Hktheone" target="_blank">GitHub</a>
+    <a href="https://www.linkedin.com/in/hassnain-ali-4b398717a/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://github.com/Hktheone" target="_blank" rel="noopener">GitHub</a>
   </div>
 </header>
+
+<section id="about" class="about">
+  <h2>About Me</h2>
+  <p>I'm a <strong>Java backend and full stack developer</strong> who works across the whole path of a feature: designing the API and data model in <strong>Java / Spring Boot</strong> or <strong>Java EE</strong>, securing it, tuning how it talks to the database, and building the <strong>Angular</strong> interface people use every day.</p>
+  <p>My work has been on systems where correctness matters. Today I work on <strong>Al Nadeeb, Qatar's government customs clearance and cargo-tracking platform</strong>. Before that I spent three years on <strong>iMetal, an ERP for the metal industry</strong> built for Jonas Metals UK. Both taught me to value clear service boundaries, role-based security, careful persistence and performance work, and front ends that make complex workflows simple.</p>
+  <p>On iMetal I gained <strong>hands-on experience with microservices</strong>, working as a Java backend developer on Spring Boot services that used Spring Cloud (Eureka, API Gateway), Kafka and gRPC. I can build and work on services like these, and I'm continuing to deepen that experience, along with Docker, CI/CD and cloud, through the personal projects below.</p>
+  <div class="highlights">
+    <div class="highlight"><span class="big">~5 years</span><span>enterprise Java &amp; Angular</span></div>
+    <div class="highlight"><span class="big">Gov &amp; ERP</span><span>customs, logistics, metal-industry ERP</span></div>
+    <div class="highlight"><span class="big">Java Backend</span><span>Spring Boot, Java EE, REST, gRPC</span></div>
+    <div class="highlight"><span class="big">IELTS C1 · 7.5</span><span>fluent English, open to relocation</span></div>
+  </div>
+</section>
 
 <section id="skills">
   <h2>Technical Skills</h2>
   <div class="skills-grid">
     <div class="skill-card">
-      <h3>Languages &amp; Core</h3>
-      <p>Java (8, 11, 17), TypeScript, JavaScript, Python</p>
+      <h3>Languages</h3>
+      <p>Java (8, 11, 17), TypeScript, JavaScript, Python, SQL</p>
     </div>
     <div class="skill-card">
       <h3>Backend</h3>
-      <p>Spring Boot, Spring, Spring Cloud, Spring Security, Hibernate, JPA, REST, gRPC, J2EE, WebFlux</p>
+      <p>Spring Boot, Spring, Spring Cloud (Eureka, API Gateway, Load Balancer), Spring Security, Spring Data JPA, Hibernate, J2EE / Java EE, JAX-RS (Jersey), WebFlux, Reactive Programming, ReactiveFeign</p>
+    </div>
+    <div class="skill-card">
+      <h3>APIs &amp; Messaging</h3>
+      <p>REST, gRPC, Apache Kafka, JWT authentication, role-based authorization</p>
     </div>
     <div class="skill-card">
       <h3>Frontend</h3>
-      <p>Angular (2–16), AngularJS, PrimeNG, RxJS, Angular Material</p>
+      <p>Angular (2–16), AngularJS, RxJS &amp; Signals, PrimeNG, Angular Material, Angular Bootstrap, React</p>
     </div>
     <div class="skill-card">
-      <h3>Data &amp; Infra</h3>
-      <p>PostgreSQL, MySQL, Oracle, Docker, AWS, Kafka, CI/CD</p>
+      <h3>Databases</h3>
+      <p>PostgreSQL, MySQL, Oracle (HQL &amp; native queries)</p>
+    </div>
+    <div class="skill-card">
+      <h3>Cloud &amp; DevOps <span style="color: var(--text-dim); font-weight: 400;">(foundational)</span></h3>
+      <p>Docker &amp; Docker Compose, CI/CD basics, AWS fundamentals (Lambda, S3, CloudFormation, CloudWatch). Growing these skills through training and personal projects.</p>
     </div>
     <div class="skill-card">
       <h3>Testing</h3>
       <p>Jasmine, Karma, Jest, Playwright</p>
+    </div>
+    <div class="skill-card">
+      <h3>Data &amp; Other</h3>
+      <p>Python data science, matplotlib, Power BI, Agile / Scrum</p>
     </div>
   </div>
 </section>
@@ -210,14 +391,40 @@
       <span class="job-title">Full Stack Developer</span>
       <span class="job-date">Sep 2025 – Present</span>
     </div>
-    <div class="job-company">General Authority of Customs (GAQ) · Malomatia, Doha</div>
-    <div class="job-desc">Government customs clearance &amp; cargo tracking platform.</div>
+    <div class="job-company">General Authority of Customs (GAQ) · Malomatia, Doha, Qatar</div>
+    <div class="job-desc">Al Nadeeb is Qatar's national customs clearance system: a single-window platform, live since 2013, through which every land, sea and air border in the country processes imports and exports. Customs brokers, importers and exporters use it to submit declarations and manifests, pay duties and track shipments in real time. Partner ministries are connected so that unrestricted goods can be cleared without manual steps, and the system has handled millions of customs declarations. I work on both the Java EE backend and the Angular front end of this platform and its e-Service portal.</div>
+    <h4>Business context</h4>
     <ul>
-      <li>Built RESTful APIs in Java EE (Servlet/JSP, JAX-RS/Jersey) for cargo tracking, document processing, and clearance workflows</li>
-      <li>Reduced query execution times by 20% via optimized Hibernate/JPA persistence on Oracle</li>
-      <li>Built role-based Angular UIs with JWT auth, improving navigation efficiency by 20%</li>
-      <li>Modernized legacy modules with new API interfaces, reducing manual intervention</li>
+      <li><strong>Who uses it:</strong> customs officers, clearance agents and brokers, importers and exporters, shipping agents, and connected government ministries.</li>
+      <li><strong>What it handles:</strong> customs declarations and manifests, duty payments, document processing, clearance decisions and real-time shipment status.</li>
+      <li><strong>Why it matters:</strong> clearance speed directly affects how fast goods reach the market, so performance, reliability and correct access control are business-critical.</li>
     </ul>
+    <div class="work-links">
+      <a href="https://www.ecustoms.gov.qa/qccswui/#/home" target="_blank" rel="noopener">Al Nadeeb ↗</a>
+      <a href="https://www.ecustoms.gov.qa/qccswui1/#/auth/login" target="_blank" rel="noopener">Al Nadeeb e-Service ↗</a>
+    </div>
+
+    <h4>Backend · Java, Java EE</h4>
+    <ul>
+      <li><strong>Customs &amp; logistics APIs:</strong> developed RESTful APIs in a Java EE (Servlet/JSP) application supporting the platform's core operations: cargo tracking, document processing and clearance workflows.</li>
+      <li><strong>Integration:</strong> used Servlets and JAX-RS (Jersey) to expose backend business logic as APIs for internal systems and for external government and partner platforms.</li>
+      <li><strong>Performance:</strong> optimized data persistence with Hibernate (JPA) for complex logistics data models, <strong>reducing query execution times by 20%</strong> and making the system easier to maintain.</li>
+      <li><strong>Oracle data access:</strong> wrote optimized HQL and native queries for efficient data access and reporting.</li>
+      <li><strong>Modernization:</strong> enhanced legacy modules with modern API interfaces, enabling digital workflows and reducing manual intervention in customs processing.</li>
+    </ul>
+
+    <h4>Frontend · Angular 12+</h4>
+    <ul>
+      <li><strong>Role-based UI:</strong> built responsive interfaces with Angular 12+ and Angular Bootstrap, with dynamic menus and granular access control that <strong>improved navigation efficiency by 20%</strong>.</li>
+      <li><strong>Secure API integration:</strong> connected the frontend to secured REST APIs using JWT authentication and Angular services for efficient data handling.</li>
+      <li><strong>Complex data entry:</strong> developed reusable components and reactive forms that streamline complex data-entry workflows in logistics operations.</li>
+      <li><strong>Secure navigation:</strong> implemented route guards and session handling for secure, state-aware navigation throughout the application.</li>
+      <li><strong>End to end:</strong> collaborated with backend teams on API integration and testing to deliver complete features.</li>
+    </ul>
+
+    <div class="chips">
+      <span class="chip">Java EE</span><span class="chip">Servlet / JSP</span><span class="chip">JAX-RS / Jersey</span><span class="chip">Hibernate / JPA</span><span class="chip">Oracle</span><span class="chip">HQL</span><span class="chip">Angular 12+</span><span class="chip">Angular Bootstrap</span><span class="chip">JWT</span>
+    </div>
   </div>
 
   <div class="job">
@@ -225,15 +432,47 @@
       <span class="job-title">Software Developer</span>
       <span class="job-date">Sep 2022 – Sep 2025</span>
     </div>
-    <div class="job-company">Contour (Constellation) Software · Karachi — iMetal (Jonas Metals UK)</div>
-    <div class="job-desc">Metal industry ERP system for Jonas Metals UK.</div>
+    <div class="job-company">Contour (Constellation Software) · Karachi, Pakistan — iMetal for Jonas Metals UK</div>
+    <div class="job-desc">iMetal is the enterprise ERP from Jonas Metals Software, built specifically for the metals industry. It runs the whole operation of metal businesses, from quoting a customer to dispatching cut material, in a domain where every item has a grade, dimensions, condition and a traceable history. Technically it is a set of Spring Boot microservices behind a Spring Cloud gateway with Angular single-page applications on top. Over three years I worked as a Java backend and Angular developer on this product, contributing to its backend services and front end in an Agile team spread across time zones.</div>
+    <h4>Business context</h4>
     <ul>
-      <li>Built microservices with Spring Boot, Spring Cloud (Eureka), API Gateway, and Load Balancer</li>
-      <li>Implemented REST and gRPC APIs; used Kafka and ReactiveFeign for service communication</li>
-      <li>Secured services with Spring Security + JWT, role-based authorization</li>
-      <li>Developed Angular (2–16) SPAs with PrimeNG, RxJS Signals, lazy loading, and AOT compilation</li>
-      <li>Wrote unit/E2E tests with Jasmine, Karma, Jest, and Playwright</li>
+      <li><strong>Who uses it:</strong> metal wholesalers and stockholders, service centres, metal traders and importers, and fabricators and processors.</li>
+      <li><strong>What it covers:</strong> quoting against live stock by grade, size and price conditions; order management; processing and production with yield and remnant tracking; purchasing and planning; warehouse receiving, picking and dispatch; inventory traceability from receipt to dispatch; and integration with finance and reporting systems.</li>
+      <li><strong>Why it's demanding:</strong> metals data is highly structured (grades, dimensions, offcuts, multiple locations) and stock levels must stay accurate across sales, processing and the warehouse at the same time.</li>
     </ul>
+    <div class="work-links">
+      <a href="https://www.jonasmetals.com/software" target="_blank" rel="noopener">Jonas Metals software ↗</a>
+    </div>
+
+    <h4>Backend · Java, Spring Boot</h4>
+    <ul>
+      <li><strong>Spring Boot services:</strong> developed and maintained backend features in Spring Boot and Spring, working within the product's microservices architecture.</li>
+      <li><strong>APIs:</strong> implemented RESTful APIs and gRPC for both service-to-service and backend-to-frontend communication.</li>
+      <li><strong>Spring Cloud:</strong> worked with Eureka (service discovery), the API Gateway and load balancing, configuring them for the services I worked on.</li>
+      <li><strong>Inter-service communication:</strong> used Kafka for event-driven messaging and Reactive Feign for typed service-to-service calls.</li>
+      <li><strong>Security:</strong> secured services with Spring Security and JWT for authentication and role-based authorization.</li>
+      <li><strong>Data layer:</strong> optimized database interactions with Spring Data JPA and Hibernate ORM, using caching strategies across PostgreSQL and MySQL.</li>
+    </ul>
+
+    <h4>Frontend · Angular 2–16</h4>
+    <ul>
+      <li><strong>Enterprise SPAs:</strong> developed dynamic, responsive web applications in Angular (2–16) with TypeScript, focused on smooth interactions and performance.</li>
+      <li><strong>Reactive programming:</strong> used RxJS Signals, Observables and Subjects to handle real-time updates and complex asynchronous workflows.</li>
+      <li><strong>Performance:</strong> improved load times with lazy loading, a modular architecture and AOT compilation.</li>
+      <li><strong>Component library:</strong> built feature-rich, reusable UI components with PrimeNG and Angular Material for a consistent enterprise design.</li>
+      <li><strong>Data integration:</strong> integrated RESTful APIs for data synchronization and interactivity.</li>
+    </ul>
+
+    <h4>Testing &amp; Collaboration</h4>
+    <ul>
+      <li><strong>Testing:</strong> improved reliability with unit and E2E tests in Jasmine, Karma and Jest, and UI automation with Playwright.</li>
+      <li><strong>Agile:</strong> worked in Agile/Scrum with daily stand-ups, sprint planning and retrospectives for continuous delivery.</li>
+      <li><strong>Distributed teamwork:</strong> collaborated with cross-functional teams across time zones, analyzing requirements and delivering solutions aligned with business goals.</li>
+    </ul>
+
+    <div class="chips">
+      <span class="chip">Spring Boot</span><span class="chip">Spring Cloud</span><span class="chip">Eureka</span><span class="chip">API Gateway</span><span class="chip">Kafka</span><span class="chip">gRPC</span><span class="chip">Reactive Feign</span><span class="chip">Spring Security</span><span class="chip">Spring Data JPA</span><span class="chip">PostgreSQL</span><span class="chip">MySQL</span><span class="chip">Angular</span><span class="chip">PrimeNG</span><span class="chip">Angular Material</span><span class="chip">Playwright</span>
+    </div>
   </div>
 
   <div class="job">
@@ -241,35 +480,130 @@
       <span class="job-title">DevOps Trainee</span>
       <span class="job-date">Mar 2022 – Jul 2022</span>
     </div>
-    <div class="job-company">SkipQ, Islamabad (Remote)</div>
+    <div class="job-company">SkipQ · Islamabad, Pakistan (Remote)</div>
+    <div class="job-desc">A remote training programme that I joined after graduating, which gave me my foundation in cloud and DevOps practices on AWS.</div>
     <ul>
-      <li>Designed scalable cloud infrastructure using AWS Lambda, S3, CloudFormation, and CloudWatch</li>
-      <li>Automated deployments and workflows using Infrastructure as Code (IaC)</li>
+      <li><strong>AWS hands-on:</strong> worked with AWS Lambda, S3, CloudFormation and CloudWatch to build and monitor cloud infrastructure.</li>
+      <li><strong>Infrastructure as Code:</strong> learned to define and automate deployments and workflows as code instead of configuring them by hand.</li>
+      <li><strong>CI &amp; monitoring basics:</strong> practised continuous integration and keeping an eye on system performance and resource usage.</li>
     </ul>
+    <div class="chips">
+      <span class="chip">AWS Lambda</span><span class="chip">S3</span><span class="chip">CloudFormation</span><span class="chip">CloudWatch</span><span class="chip">IaC</span><span class="chip">CI</span>
+    </div>
   </div>
 </section>
 
 <section id="projects">
   <h2>Personal Projects</h2>
+  <p class="section-intro">Personal projects where I practise building systems end to end, including microservices, Kafka and Docker, which I'm continuing to learn. The code is on <a href="https://github.com/Hktheone" target="_blank" rel="noopener" style="color: var(--accent);">GitHub</a>, and each one runs locally with Docker or a single command.</p>
   <div class="projects-grid">
-    <div class="project-card">
+
+    <div class="project-card featured">
+      <span class="badge">Featured</span>
       <h3>TrackFlow — Order &amp; Delivery Platform</h3>
-      <span class="tech">Java 21 · Spring Boot 4 · Spring Cloud Gateway · Eureka · Kafka (KRaft) · PostgreSQL · Angular 22 · Docker</span>
-      <p>A fully containerized, event-driven order and delivery system. Order and delivery services each own their own PostgreSQL database and communicate only through Kafka events, so a confirmed order automatically becomes a delivery and every delivery update flows back to the order. The API gateway handles routing and authentication, issuing RS256 JWTs with role-based access for admins, customers and riders, and riders are tracked live on a map. Includes idempotent consumers, dead-letter handling and after-commit event publishing, all started with a single <code>docker compose up</code>.</p>
-      <a href="https://github.com/Hktheone/TrackFlow" target="_blank">View on GitHub →</a>
+      <span class="tech">Java 21 · Spring Boot 4 · Spring Cloud Gateway · Eureka · Kafka (KRaft) · PostgreSQL · Flyway · Spring Security (JWT) · Angular 22 · Leaflet · Docker</span>
+      <p>My most complete personal project: a containerized, event-driven system for managing orders from checkout to doorstep, built to practise microservices, Kafka and Docker beyond what I'd used at work. Customers place orders, riders deliver them while being tracked live on a map, and admins oversee everything. Every part runs in its own container and starts with a single <code>docker compose up</code>.</p>
+      <div class="flow">Browser → Nginx → API Gateway (auth + routing) → order-service / delivery-service
+order-service    ──ORDER_CONFIRMED──►  Kafka  ──►  delivery-service  (creates the delivery)
+delivery-service ──status updates───►  Kafka  ──►  order-service     (mirrors the status)</div>
+      <div class="cols">
+        <div>
+          <h4>Architecture</h4>
+          <ul>
+            <li><strong>Database per service:</strong> order and delivery services each own their PostgreSQL schema, managed with Flyway.</li>
+            <li><strong>Event-driven:</strong> services never call each other; a confirmed order becomes a delivery and every delivery update flows back to the order through Kafka.</li>
+            <li><strong>Gateway + discovery:</strong> Spring Cloud Gateway routes through Eureka; the business services aren't exposed outside the network at all.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Security</h4>
+          <ul>
+            <li><strong>Login built into the gateway:</strong> BCrypt passwords, signed RS256 JWTs, and real logout through token revocation.</li>
+            <li><strong>Three roles:</strong> Admin, Customer and Rider. The gateway checks roles, and each service re-verifies the token and enforces ownership ("is this your order?").</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Reliability</h4>
+          <ul>
+            <li>Events are published only after the database commit, so rolled-back changes never leak out.</li>
+            <li>Idempotent consumers and forward-only state machines make Kafka redelivery harmless.</li>
+            <li>Retries with a dead-letter topic for bad messages, and optimistic locking for concurrent updates.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Frontend</h4>
+          <ul>
+            <li>Angular 22 with standalone components, signals, <code>httpResource</code> and OnPush change detection.</li>
+            <li>Role-aware screens, plus live rider tracking on a Leaflet map using the browser's GPS.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="links">
+        <a href="https://github.com/Hktheone/TrackFlow" target="_blank" rel="noopener">View on GitHub →</a>
+        <a href="https://github.com/Hktheone/TrackFlow/blob/main/docs/ARCHITECTURE.md" target="_blank" rel="noopener">Architecture write-up →</a>
+      </div>
     </div>
+
     <div class="project-card">
       <h3>Java Microservices Platform</h3>
-      <span class="tech">Java 21 · Spring Boot 3.2 · Kafka · Prometheus · Resilience4j</span>
-      <p>A resilient microservices architecture with Kafka-based event-driven communication, circuit-breaker patterns, and observability via Prometheus metrics.</p>
-      <a href="https://github.com/Hktheone/micro-service-example" target="_blank">View on GitHub →</a>
+      <span class="tech">Java 21 · Spring Boot 3.2 · Spring Cloud · Kafka · PostgreSQL · Nginx · Resilience4j · Prometheus · Docker</span>
+      <p>A learning project where I built a small microservices setup around an order and inventory domain, to practise how independent services communicate and handle failure.</p>
+      <ul>
+        <li><strong>Two independent services</strong> (orders and inventory), each with its own data in PostgreSQL.</li>
+        <li><strong>Sync and async:</strong> stock is checked over REST (Feign) protected by a <strong>Resilience4j circuit breaker</strong>, and order events are published to <strong>Kafka</strong>.</li>
+        <li><strong>Nginx</strong> as the reverse proxy / gateway in front of the services.</li>
+        <li><strong>Observability</strong> through Prometheus metrics, all orchestrated with Docker Compose.</li>
+      </ul>
+      <div class="links">
+        <a href="https://github.com/Hktheone/micro-service-example" target="_blank" rel="noopener">View on GitHub →</a>
+      </div>
     </div>
+
     <div class="project-card">
-      <h3>Real-Time Dashboard</h3>
-      <span class="tech">Angular 17+ · TypeScript · RxJS · Signals</span>
-      <p>A real-time monitoring dashboard with signal-based state management, OnPush change detection, and live data integration.</p>
-      <a href="https://github.com/Hktheone/quake-watch" target="_blank">View on GitHub →</a>
+      <h3>QuakeWatch — Real-Time Dashboard</h3>
+      <span class="tech">Angular · TypeScript · RxJS · Signals · globe.gl (Three.js)</span>
+      <p>A real-time monitoring dashboard that plots every earthquake from the last 24 hours on an interactive 3D globe, using the public USGS live feed.</p>
+      <ul>
+        <li><strong>Live data:</strong> one shared polling stream (<code>shareReplay</code>) refreshes the feed every minute for the whole app.</li>
+        <li><strong>Signal-based state:</strong> stat cards (count, strongest, average magnitude, regions) are all <code>computed()</code> from one signal.</li>
+        <li><strong>3D globe:</strong> quakes coloured and sized by magnitude, with filters, hover tooltips and auto-rotation.</li>
+        <li><strong>Modern Angular:</strong> standalone components, OnPush change detection, new control flow and a global HTTP error interceptor.</li>
+      </ul>
+      <div class="links">
+        <a href="https://github.com/Hktheone/quake-watch" target="_blank" rel="noopener">View on GitHub →</a>
+      </div>
     </div>
+
+    <div class="project-card">
+      <h3>Python, Machine Learning &amp; Desktop Apps</h3>
+      <span class="tech">Python · TensorFlow · Scikit-learn · Web Scraping · JavaFX · Java Swing · Tkinter · JDBC · SQLite</span>
+      <p>Earlier projects across Python and desktop development.</p>
+      <ul>
+        <li><strong>Machine learning:</strong> built models with TensorFlow and Scikit-learn.</li>
+        <li><strong>Data science &amp; scraping:</strong> Python projects in web scraping and data analysis.</li>
+        <li><strong>Desktop apps:</strong> built with JavaFX, Java Swing and Tkinter, with database connectivity through JDBC and SQLite.</li>
+      </ul>
+      <div class="links">
+        <a href="https://github.com/Hktheone" target="_blank" rel="noopener">Browse on GitHub →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="education">
+  <h2>Education</h2>
+  <div class="edu">
+    <div class="edu-header">
+      <span class="degree">Bachelor of Software Engineering</span>
+      <span class="job-date">Jan 2018 – Dec 2021</span>
+    </div>
+    <div class="school">IBA University Sukkur · Sindh, Pakistan</div>
+    <ul>
+      <li>Object-Oriented Programming (Java), Data Structures &amp; Algorithms (C++), Operating Systems</li>
+      <li>Enterprise App Development (React &amp; Node.js)</li>
+      <li>Machine Learning, Image Processing and Introduction to Big Data (Python, PySpark)</li>
+    </ul>
   </div>
 </section>
 
@@ -277,7 +611,7 @@
   <h2>Certifications</h2>
   <div class="cert-list">
     <div class="cert-item">
-      <span class="name">IELTS Academic — C1 (7.5)</span>
+      <span class="name">IELTS Academic — C1, fluent (7.5)</span>
       <span class="issuer">British Council · Oct 2023</span>
     </div>
     <div class="cert-item">
@@ -285,12 +619,28 @@
       <span class="issuer">Certificates.dev · Sep 2025</span>
     </div>
     <div class="cert-item">
+      <span class="name">Introduction to Data Science in Python</span>
+      <span class="issuer">Coursera · Sep 2023</span>
+    </div>
+    <div class="cert-item">
+      <span class="name">Using Python to Access Web Data</span>
+      <span class="issuer">Coursera · Jul 2022</span>
+    </div>
+    <div class="cert-item">
       <span class="name">Spring Boot and Spring Mastery</span>
       <span class="issuer">Udemy · May 2022</span>
     </div>
-    <div class="cert-item">
-      <span class="name">Introduction to Data Science in Python</span>
-      <span class="issuer">Coursera · Sep 2023</span>
+  </div>
+</section>
+
+<section id="contact">
+  <h2>Get in Touch</h2>
+  <div class="contact-box">
+    <p>I'm open to full stack and backend roles (Java, Spring Boot, Angular) and available for immediate relocation with visa sponsorship. The quickest way to reach me is by email.</p>
+    <div class="contact-links">
+      <a href="mailto:khasnainali@gmail.com">khasnainali@gmail.com</a>
+      <a href="https://www.linkedin.com/in/hassnain-ali-4b398717a/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/Hktheone" target="_blank" rel="noopener">GitHub</a>
     </div>
   </div>
 </section>
