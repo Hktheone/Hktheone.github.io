@@ -98,12 +98,18 @@
   /* sections */
   section { padding: 44px 0; border-top: 1px solid var(--faint); }
   section h2 {
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--accent);
-    margin-bottom: 26px;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 22px;
+  }
+  section h2::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--accent);
+    margin-top: 10px;
   }
   section > .wrap > p { color: var(--muted); margin-bottom: 14px; }
 
@@ -129,32 +135,46 @@
   .live-links a { margin-right: 14px; }
 
   /* projects */
-  .project { margin-bottom: 52px; }
+  .wrap.wide { max-width: 1040px; }
+  .project {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 32px;
+    align-items: start;
+    background: var(--surface);
+    border: 1px solid var(--faint);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 28px;
+  }
   .project:last-child { margin-bottom: 0; }
-  .project h3 { font-size: 1.12rem; margin-bottom: 2px; }
-  .project .stack { margin-bottom: 12px; }
-  .project p { margin-bottom: 12px; }
-  .project img {
-    display: block;
-    width: 100%;
-    height: auto;
+  .project.flip .media { order: 2; }
+  .project .media {
+    position: sticky;
+    top: 76px;
     border-radius: 8px;
     border: 1px solid var(--faint);
-    margin-bottom: 16px;
-  }
-  .project .links { font-size: 0.92rem; }
-  .project .links a { margin-right: 16px; }
-  pre.flow {
-    font-family: Consolas, 'Cascadia Code', ui-monospace, monospace;
-    font-size: 0.8rem;
-    line-height: 1.55;
-    color: var(--muted);
     background: var(--code-bg);
-    border-radius: 6px;
-    padding: 12px 14px;
-    margin-bottom: 14px;
-    overflow-x: auto;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
   }
+  .project .media img { display: block; width: 100%; height: 100%; object-fit: contain; }
+  .project .media svg { display: block; width: 100%; height: 100%; }
+  .project h3 { font-size: 1.25rem; margin-bottom: 2px; }
+  .project .stack { margin-bottom: 14px; }
+  .project p { margin-bottom: 12px; }
+  .project .links { font-size: 0.92rem; margin-top: 4px; }
+  .project .links a { margin-right: 16px; }
+
+  /* drawn diagrams for projects without a screenshot */
+  .diagram .box { fill: var(--surface); stroke: var(--muted); stroke-width: 1.2; }
+  .diagram .busfill { fill: var(--accent); fill-opacity: 0.12; stroke: var(--accent); stroke-width: 1.2; }
+  .diagram .db { fill: var(--bg); stroke: var(--muted); stroke-width: 1.2; }
+  .diagram .line { stroke: var(--muted); stroke-width: 1.2; fill: none; }
+  .diagram .accent-line { stroke: var(--accent); stroke-width: 1.4; fill: none; stroke-dasharray: 4 3; }
+  .diagram text { fill: var(--text); font-family: 'Segoe UI', Roboto, sans-serif; font-size: 11px; text-anchor: middle; }
+  .diagram text.small { fill: var(--muted); font-size: 9.5px; }
+  .diagram text.hot { fill: var(--accent); font-weight: 600; }
 
   /* education & certs */
   .row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2px 16px; padding: 8px 0; border-bottom: 1px dashed var(--faint); }
@@ -169,6 +189,9 @@
     .intro h1 { font-size: 1.9rem; }
     .skills { grid-template-columns: 1fr; gap: 2px; }
     .skills dd { margin-bottom: 10px; }
+    .project { grid-template-columns: 1fr; padding: 20px; gap: 18px; }
+    .project.flip .media { order: 0; }
+    .project .media { position: relative; top: 0; }
   }
 </style>
 </head>
@@ -264,62 +287,112 @@
 </section>
 
 <section id="projects">
-  <div class="wrap">
+  <div class="wrap wide">
     <h2>Projects</h2>
     <p>Things I've built in my own time, mostly to try out ideas I don't get to use at work. All of the code is on <a href="https://github.com/Hktheone" target="_blank" rel="noopener">GitHub</a>.</p>
 
-    <div class="project">
-      <h3>TrackFlow</h3>
-      <p class="stack">Java 21, Spring Boot 4, Spring Cloud Gateway, Eureka, Kafka, PostgreSQL, Angular 22, Docker</p>
-      <p>An order and delivery system: customers place orders, riders deliver them while showing up live on a map, and an admin can see everything. I built it to get more practice with microservices, Kafka and Docker than I'd had at work, and it's the biggest thing I've made on my own.</p>
-      <pre class="flow">order-service ── ORDER_CONFIRMED ──▶ Kafka ──▶ delivery-service   (creates a delivery)
-delivery-service ── status updates ──▶ Kafka ──▶ order-service   (updates the order)</pre>
-      <ul>
-        <li>The order and delivery services each have their own PostgreSQL database and never call each other directly. Everything between them goes through Kafka events.</li>
-        <li>Login lives in the gateway: hashed passwords, signed JWTs, and a logout that really invalidates the token. There are three roles (admin, customer, rider), and each service checks that you own what you're asking for.</li>
-        <li>I spent time on the failure cases: events are only sent after the database commit, a duplicate event can't break anything, and messages that keep failing go to a dead-letter topic.</li>
-        <li>The front end is Angular 22 with signals. Riders can share their phone's GPS while delivering.</li>
-        <li>The whole thing, including databases, Kafka and the front end, starts with one <code>docker compose up</code>.</li>
-      </ul>
-      <div class="links">
-        <a href="https://github.com/Hktheone/TrackFlow" target="_blank" rel="noopener">Code</a>
-        <a href="https://github.com/Hktheone/TrackFlow/blob/main/docs/ARCHITECTURE.md" target="_blank" rel="noopener">How it's built</a>
+    <article class="project">
+      <div class="media">
+        <svg class="diagram" viewBox="0 0 400 250" role="img" aria-label="TrackFlow architecture: the Angular app talks to the API gateway, which routes to the order and delivery services; they exchange events through Kafka and each has its own database">
+          <rect class="box" x="150" y="14" width="100" height="28" rx="6"/><text x="200" y="32">Angular app</text>
+          <path class="line" d="M200 42 V60"/>
+          <rect class="box" x="120" y="60" width="160" height="34" rx="6"/><text x="200" y="76">API gateway</text><text class="small" x="200" y="88">login · JWT · routing</text>
+          <path class="line" d="M165 94 L105 116 M235 94 L295 116"/>
+          <rect class="box" x="40" y="116" width="130" height="34" rx="6"/><text x="105" y="137">order-service</text>
+          <rect class="box" x="230" y="116" width="130" height="34" rx="6"/><text x="295" y="137">delivery-service</text>
+          <path class="accent-line" d="M105 150 V172 M295 150 V172"/>
+          <text class="small" x="155" y="166">ORDER_CONFIRMED</text><text class="small" x="248" y="166">status updates</text>
+          <rect class="busfill" x="40" y="172" width="320" height="26" rx="13"/><text class="hot" x="200" y="189">Kafka</text>
+          <path class="line" d="M48 150 Q14 190 72 222 M352 150 Q386 190 328 222"/>
+          <ellipse class="db" cx="105" cy="226" rx="36" ry="11"/><text class="small" x="105" y="229">orders DB</text>
+          <ellipse class="db" cx="295" cy="226" rx="40" ry="11"/><text class="small" x="295" y="229">deliveries DB</text>
+        </svg>
       </div>
-    </div>
+      <div class="body">
+        <h3>TrackFlow</h3>
+        <p class="stack">Java 21, Spring Boot 4, Spring Cloud Gateway, Eureka, Kafka, PostgreSQL, Angular 22, Docker</p>
+        <p>An order and delivery system: customers place orders, riders deliver them while showing up live on a map, and an admin can see everything. I built it to get more practice with microservices, Kafka and Docker than I'd had at work, and it's the biggest thing I've made on my own.</p>
+        <ul>
+          <li>The order and delivery services each have their own PostgreSQL database and never call each other directly. Everything between them goes through Kafka events.</li>
+          <li>Login lives in the gateway: hashed passwords, signed JWTs, and a logout that really invalidates the token. There are three roles (admin, customer, rider), and each service checks that you own what you're asking for.</li>
+          <li>I spent time on the failure cases: events are only sent after the database commit, a duplicate event can't break anything, and messages that keep failing go to a dead-letter topic.</li>
+          <li>The front end is Angular 22 with signals. Riders can share their phone's GPS while delivering.</li>
+          <li>The whole thing, including databases, Kafka and the front end, starts with one <code>docker compose up</code>.</li>
+        </ul>
+        <div class="links">
+          <a href="https://github.com/Hktheone/TrackFlow" target="_blank" rel="noopener">Code</a>
+          <a href="https://github.com/Hktheone/TrackFlow/blob/main/docs/ARCHITECTURE.md" target="_blank" rel="noopener">How it's built</a>
+        </div>
+      </div>
+    </article>
 
-    <div class="project">
-      <img src="spacewars.gif" alt="Space Wars being played, with the thread pool sidebar on the right" loading="lazy">
-      <h3>Space Wars</h3>
-      <p class="stack">Java 21, java.util.concurrent, Swing, Maven</p>
-      <p>A small Space Invaders clone I made to actually <em>see</em> how a Java thread pool behaves. Every enemy and every bullet is a task on a <code>ThreadPoolExecutor</code>, and the sidebar shows what each worker thread is doing while you play.</p>
-      <ul>
-        <li>There are two bounded pools, one for enemies and one for bullets. Make a pool smaller with its slider and you can watch the queue fill up, then new enemies get rejected outright.</li>
-        <li>Blue enemies freeze when you hit them. Their thread really is asleep (<code>TIMED_WAITING</code>) until you hit them again or they thaw after five seconds.</li>
-        <li>All the numbers in the sidebar come from the executor itself (active count, queue size, completed, rejected), so you can also watch idle threads time out and shut down.</li>
-      </ul>
-      <div class="links">
-        <a href="https://github.com/Hktheone/space-wars" target="_blank" rel="noopener">Code</a>
+    <article class="project flip">
+      <div class="media">
+        <img src="spacewars.gif" alt="Space Wars being played, with the thread pool sidebar on the right" loading="lazy">
       </div>
-    </div>
+      <div class="body">
+        <h3>Space Wars</h3>
+        <p class="stack">Java 21, java.util.concurrent, Swing, Maven</p>
+        <p>A small Space Invaders clone I made to actually <em>see</em> how a Java thread pool behaves. Every enemy and every bullet is a task on a <code>ThreadPoolExecutor</code>, and the sidebar shows what each worker thread is doing while you play.</p>
+        <ul>
+          <li>There are two bounded pools, one for enemies and one for bullets. Make a pool smaller with its slider and you can watch the queue fill up, then new enemies get rejected outright.</li>
+          <li>Blue enemies freeze when you hit them. Their thread really is asleep (<code>TIMED_WAITING</code>) until you hit them again or they thaw after five seconds.</li>
+          <li>All the numbers in the sidebar come from the executor itself (active count, queue size, completed, rejected), so you can also watch idle threads time out and shut down.</li>
+        </ul>
+        <div class="links">
+          <a href="https://github.com/Hktheone/space-wars" target="_blank" rel="noopener">Code</a>
+        </div>
+      </div>
+    </article>
 
-    <div class="project">
-      <img src="quakewatch.png" alt="QuakeWatch dashboard with earthquakes plotted on a 3D globe" loading="lazy">
-      <h3>QuakeWatch</h3>
-      <p class="stack">Angular, TypeScript, RxJS, signals, globe.gl</p>
-      <p>A live dashboard that puts every earthquake from the last 24 hours on a 3D globe, using the public USGS feed. It refreshes every minute through one shared stream, and the stats on top (count, strongest, average magnitude, regions) are all computed from a single signal. Quakes are coloured and sized by magnitude, and you can filter by size or region.</p>
-      <div class="links">
-        <a href="https://github.com/Hktheone/quake-watch" target="_blank" rel="noopener">Code</a>
+    <article class="project">
+      <div class="media">
+        <img src="quakewatch.png" alt="QuakeWatch dashboard with earthquakes plotted on a 3D globe" loading="lazy">
       </div>
-    </div>
+      <div class="body">
+        <h3>QuakeWatch</h3>
+        <p class="stack">Angular, TypeScript, RxJS, signals, globe.gl</p>
+        <p>A live dashboard that puts every earthquake from the last 24 hours on a 3D globe, using the public USGS feed.</p>
+        <ul>
+          <li>The feed refreshes every minute through one shared stream, so the whole app makes a single request.</li>
+          <li>The stats on top (count, strongest, average magnitude, regions) are all computed from one signal.</li>
+          <li>Quakes are coloured and sized by magnitude, and you can filter by size or region.</li>
+        </ul>
+        <div class="links">
+          <a href="https://github.com/Hktheone/quake-watch" target="_blank" rel="noopener">Code</a>
+        </div>
+      </div>
+    </article>
 
-    <div class="project">
-      <h3>Microservices example</h3>
-      <p class="stack">Java 21, Spring Boot 3.2, Kafka, PostgreSQL, Nginx, Resilience4j, Prometheus</p>
-      <p>An earlier and smaller learning project with two services, orders and inventory. The order service checks stock over REST behind a circuit breaker, then publishes an event to Kafka. Nginx sits in front, and Prometheus collects metrics.</p>
-      <div class="links">
-        <a href="https://github.com/Hktheone/micro-service-example" target="_blank" rel="noopener">Code</a>
+    <article class="project flip">
+      <div class="media">
+        <svg class="diagram" viewBox="0 0 400 250" role="img" aria-label="Microservices example: Nginx in front of an order service and an inventory service, which talk over REST with a circuit breaker and through Kafka; data in PostgreSQL and metrics in Prometheus">
+          <rect class="box" x="150" y="16" width="100" height="30" rx="6"/><text x="200" y="35">Nginx</text>
+          <path class="line" d="M180 46 L110 84 M220 46 L290 84"/>
+          <rect class="box" x="45" y="84" width="130" height="36" rx="6"/><text x="110" y="106">order-service</text>
+          <rect class="box" x="225" y="84" width="130" height="36" rx="6"/><text x="290" y="106">inventory-service</text>
+          <path class="line" d="M175 102 H225"/><text class="small" x="200" y="96">REST</text><text class="small" x="200" y="116">circuit breaker</text>
+          <path class="accent-line" d="M110 120 V150 M290 120 V150"/>
+          <rect class="busfill" x="45" y="150" width="310" height="26" rx="13"/><text class="hot" x="200" y="167">Kafka</text>
+          <path class="line" d="M60 120 Q40 200 156 214 M340 120 Q360 160 246 212"/>
+          <ellipse class="db" cx="200" cy="214" rx="46" ry="11"/><text class="small" x="200" y="217">PostgreSQL</text>
+          <rect class="box" x="296" y="204" width="84" height="28" rx="6"/><text class="small" x="338" y="222">Prometheus</text>
+        </svg>
       </div>
-    </div>
+      <div class="body">
+        <h3>Microservices example</h3>
+        <p class="stack">Java 21, Spring Boot 3.2, Kafka, PostgreSQL, Nginx, Resilience4j, Prometheus</p>
+        <p>An earlier and smaller learning project, with two services for orders and inventory.</p>
+        <ul>
+          <li>The order service checks stock with the inventory service over REST, behind a Resilience4j circuit breaker.</li>
+          <li>Once an order is created it publishes an event to Kafka.</li>
+          <li>Nginx sits in front of both services, and Prometheus collects their metrics.</li>
+        </ul>
+        <div class="links">
+          <a href="https://github.com/Hktheone/micro-service-example" target="_blank" rel="noopener">Code</a>
+        </div>
+      </div>
+    </article>
   </div>
 </section>
 
