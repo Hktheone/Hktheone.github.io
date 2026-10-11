@@ -15,453 +15,525 @@
 <style>
   :root,
   [data-theme="dark"] {
-    --bg: #111315;
-    --surface: #181b1f;
-    --text: #e8e6e3;
-    --muted: #9a9894;
-    --faint: #2a2d32;
+    --bg: #101419;
+    --glow: rgba(224, 164, 88, 0.07);
+    --heading: #eceae6;
+    --text: #a7aeb9;
+    --muted: #747c88;
     --accent: #e0a458;
-    --link: #8ab4f8;
-    --code-bg: #1f2328;
+    --card-hover: rgba(255, 255, 255, 0.035);
+    --card-border: rgba(255, 255, 255, 0.06);
+    --pill-bg: rgba(224, 164, 88, 0.1);
+    --line: #3a414c;
+    --media-bg: #171c22;
+    --code-bg: rgba(255, 255, 255, 0.06);
   }
   [data-theme="light"] {
-    --bg: #faf8f5;
-    --surface: #ffffff;
-    --text: #1f1d1a;
-    --muted: #66625c;
-    --faint: #e6e1d9;
+    --bg: #f7f5f1;
+    --glow: rgba(181, 101, 29, 0.07);
+    --heading: #1f1d1a;
+    --text: #4f4b45;
+    --muted: #7c776f;
     --accent: #b5651d;
-    --link: #1a5fb4;
-    --code-bg: #f1ede6;
+    --card-hover: rgba(0, 0, 0, 0.035);
+    --card-border: rgba(0, 0, 0, 0.07);
+    --pill-bg: rgba(181, 101, 29, 0.1);
+    --line: #cfc8bc;
+    --media-bg: #ffffff;
+    --code-bg: rgba(0, 0, 0, 0.05);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
-    font-family: 'Segoe UI', -apple-system, Roboto, Helvetica, Arial, sans-serif;
     background: var(--bg);
     color: var(--text);
-    line-height: 1.65;
+    font-family: 'Segoe UI', -apple-system, Roboto, Helvetica, Arial, sans-serif;
     font-size: 16px;
-    transition: background 0.2s, color 0.2s;
+    line-height: 1.65;
+    transition: background 0.25s, color 0.25s;
   }
-  a { color: var(--link); }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--accent); color: var(--bg); }
   code {
     font-family: Consolas, 'Cascadia Code', ui-monospace, monospace;
-    font-size: 0.88em;
+    font-size: 0.86em;
     background: var(--code-bg);
     border-radius: 4px;
     padding: 1px 5px;
+    color: var(--heading);
   }
-  .wrap { max-width: 760px; margin: 0 auto; padding: 0 20px; }
 
-  /* top bar */
-  .topbar {
+  /* soft light that follows the mouse */
+  .glow {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    transition: background 0.2s;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 48px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: 64px;
+  }
+
+  /* ---- left column ---- */
+  .side {
     position: sticky;
     top: 0;
-    z-index: 10;
-    background: var(--bg);
-    border-bottom: 1px solid var(--faint);
-  }
-  .topbar .wrap {
+    height: 100vh;
+    padding: 88px 0 56px;
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: space-between;
-    gap: 16px;
-    height: 56px;
   }
-  .topbar .name { font-weight: 600; color: var(--text); text-decoration: none; }
-  .topbar nav { display: flex; gap: 18px; flex-wrap: wrap; }
-  .topbar nav a { color: var(--muted); text-decoration: none; font-size: 0.92rem; }
-  .topbar nav a:hover { color: var(--text); }
+  .side h1 { color: var(--heading); font-size: 2.9rem; line-height: 1.1; letter-spacing: -0.02em; }
+  .side h1 a:hover { color: var(--accent); }
+  .side .title { color: var(--heading); font-size: 1.2rem; font-weight: 500; margin-top: 12px; }
+  .side .blurb { max-width: 320px; margin-top: 16px; }
+
+  .toc { margin-top: 56px; list-style: none; }
+  .toc a {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .toc a::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: currentColor;
+    transition: width 0.2s;
+  }
+  .toc a:hover, .toc a.active { color: var(--heading); }
+  .toc a:hover::before, .toc a.active::before { width: 64px; }
+
+  .side-bottom { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .socials { display: flex; gap: 18px; list-style: none; }
+  .socials a { color: var(--muted); display: inline-flex; }
+  .socials a:hover { color: var(--heading); }
+  .socials svg { width: 22px; height: 22px; fill: currentColor; }
   .theme-toggle {
-    flex: none;
-    border: 1px solid var(--faint);
-    background: var(--surface);
-    color: var(--text);
-    border-radius: 6px;
-    padding: 5px 10px;
+    margin-left: auto;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--heading);
+    border-radius: 999px;
+    padding: 6px 14px;
     font: inherit;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     cursor: pointer;
   }
-  .theme-toggle:hover { border-color: var(--muted); }
+  .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
 
-  /* intro */
-  .intro { padding: 72px 0 48px; }
-  .intro h1 { font-size: 2.3rem; line-height: 1.2; margin-bottom: 6px; }
-  .intro .role { color: var(--accent); font-size: 1.1rem; margin-bottom: 22px; }
-  .intro p { color: var(--muted); max-width: 620px; margin-bottom: 14px; }
-  .intro p strong { color: var(--text); font-weight: 600; }
-  .contact { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 22px; font-size: 0.95rem; }
+  /* ---- right column ---- */
+  main { padding: 88px 0 72px; }
+  main section { margin-bottom: 120px; scroll-margin-top: 88px; }
+  .mobile-heading { display: none; }
+  .about p { margin-bottom: 16px; }
+  .about strong, .about a.inline { color: var(--heading); font-weight: 500; }
+  .about a.inline:hover { color: var(--accent); }
 
-  /* sections */
-  section { padding: 44px 0; border-top: 1px solid var(--faint); }
-  section h2 {
-    font-size: 1.6rem;
-    font-weight: 700;
-    margin-bottom: 22px;
-  }
-  section h2::after {
-    content: '';
-    display: block;
-    width: 40px;
-    height: 3px;
-    border-radius: 2px;
-    background: var(--accent);
-    margin-top: 10px;
-  }
-  section > .wrap > p { color: var(--muted); margin-bottom: 14px; }
-
-  /* skills */
-  .skills { display: grid; grid-template-columns: 170px 1fr; gap: 10px 20px; }
-  .skills dt { font-weight: 600; }
-  .skills dd { color: var(--muted); }
-
-  /* jobs */
-  .job { margin-bottom: 44px; }
-  .job:last-child { margin-bottom: 0; }
-  .job-top { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 4px 16px; }
-  .job h3 { font-size: 1.12rem; }
-  .when { color: var(--muted); font-size: 0.9rem; white-space: nowrap; }
-  .where { color: var(--muted); margin-bottom: 12px; }
-  .job p { margin-bottom: 12px; }
-  .job ul, .project ul { margin: 0 0 12px 1.1em; }
-  .job li, .project li { margin-bottom: 6px; }
-  .job li::marker, .project li::marker { color: var(--accent); }
-  .stack { color: var(--muted); font-size: 0.9rem; }
-  .stack b { color: var(--text); font-weight: 600; }
-  .live-links { font-size: 0.92rem; margin-bottom: 12px; }
-  .live-links a { margin-right: 14px; }
-
-  /* projects */
-  .wrap.wide { max-width: 1040px; }
-  .project {
+  /* hoverable entries (jobs and projects) */
+  .entries { list-style: none; }
+  .entries > li { margin-bottom: 48px; }
+  .entry {
+    position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 32px;
-    align-items: start;
-    background: var(--surface);
-    border: 1px solid var(--faint);
-    border-radius: 12px;
-    padding: 28px;
-    margin-bottom: 28px;
-  }
-  .project:last-child { margin-bottom: 0; }
-  .project.flip .media { order: 2; }
-  .project .media {
-    position: sticky;
-    top: 76px;
+    gap: 16px;
+    padding: 18px;
+    margin: 0 -18px;
     border-radius: 8px;
-    border: 1px solid var(--faint);
-    background: var(--code-bg);
-    overflow: hidden;
-    aspect-ratio: 16 / 10;
+    border: 1px solid transparent;
+    transition: background 0.2s, border-color 0.2s;
   }
-  .project .media img { display: block; width: 100%; height: 100%; object-fit: contain; }
-  .project .media svg { display: block; width: 100%; height: 100%; }
-  .project h3 { font-size: 1.25rem; margin-bottom: 2px; }
-  .project .stack { margin-bottom: 14px; }
-  .project p { margin-bottom: 12px; }
-  .project .links { font-size: 0.92rem; margin-top: 4px; }
-  .project .links a { margin-right: 16px; }
+  .entries:hover .entry { opacity: 0.55; }
+  .entries .entry:hover { opacity: 1; background: var(--card-hover); border-color: var(--card-border); }
+  .entry { transition: opacity 0.2s, background 0.2s, border-color 0.2s; }
+  .job { grid-template-columns: 130px 1fr; }
+  .when {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-top: 4px;
+  }
+  .entry h3 { color: var(--heading); font-size: 1rem; font-weight: 600; line-height: 1.4; }
+  .job-head { display: flex; align-items: center; gap: 12px; }
+  .job-head .logo {
+    flex: none;
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #ffffff;
+    padding: 4px;
+    border: 1px solid var(--card-border);
+  }
+  .entry h3 .org { font-weight: 400; }
+  .entry:hover h3 { color: var(--accent); }
+  .entry h3 a::after { content: ' ↗'; font-size: 0.85em; }
+  .entry .sub { color: var(--muted); font-size: 0.92rem; margin-top: 2px; }
+  .entry p { font-size: 0.94rem; margin-top: 10px; }
+  .entry ul.points { margin: 10px 0 0 1.1em; font-size: 0.94rem; }
+  .entry ul.points li { margin-bottom: 6px; }
+  .entry ul.points li::marker { color: var(--accent); }
+  .links-row { margin-top: 10px; font-size: 0.9rem; display: flex; gap: 16px; flex-wrap: wrap; }
+  .links-row a { color: var(--heading); font-weight: 500; }
+  .links-row a:hover { color: var(--accent); }
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; list-style: none; }
+  .pills li {
+    background: var(--pill-bg);
+    color: var(--accent);
+    font-size: 0.76rem;
+    font-weight: 500;
+    padding: 3px 12px;
+    border-radius: 999px;
+  }
 
-  /* drawn diagrams for projects without a screenshot */
-  .diagram .box { fill: var(--surface); stroke: var(--muted); stroke-width: 1.2; }
-  .diagram .busfill { fill: var(--accent); fill-opacity: 0.12; stroke: var(--accent); stroke-width: 1.2; }
-  .diagram .db { fill: var(--bg); stroke: var(--muted); stroke-width: 1.2; }
-  .diagram .line { stroke: var(--muted); stroke-width: 1.2; fill: none; }
-  .diagram .accent-line { stroke: var(--accent); stroke-width: 1.4; fill: none; stroke-dasharray: 4 3; }
-  .diagram text { fill: var(--text); font-family: 'Segoe UI', Roboto, sans-serif; font-size: 11px; text-anchor: middle; }
-  .diagram text.small { fill: var(--muted); font-size: 9.5px; }
+  /* projects: picture beside the text */
+  .project { grid-template-columns: 220px 1fr; }
+  .media {
+    border-radius: 6px;
+    border: 1px solid var(--card-border);
+    background: var(--media-bg);
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    margin-top: 4px;
+  }
+  .media img { display: block; width: 100%; height: 100%; object-fit: contain; }
+  .media svg { display: block; width: 100%; height: 100%; }
+  .diagram .box { fill: var(--bg); stroke: var(--muted); stroke-width: 2; }
+  .diagram .bus { fill: var(--pill-bg); stroke: var(--accent); stroke-width: 2; }
+  .diagram .line { stroke: var(--muted); stroke-width: 2; fill: none; }
+  .diagram .dash { stroke: var(--accent); stroke-width: 2; fill: none; stroke-dasharray: 6 5; }
+  .diagram text { fill: var(--heading); font-family: 'Segoe UI', Roboto, sans-serif; font-size: 20px; text-anchor: middle; }
   .diagram text.hot { fill: var(--accent); font-weight: 600; }
 
-  /* education & certs */
-  .row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2px 16px; padding: 8px 0; border-bottom: 1px dashed var(--faint); }
-  .row:last-child { border-bottom: none; }
-  .row span:last-child { color: var(--muted); font-size: 0.92rem; }
+  .more { display: inline-flex; gap: 8px; color: var(--heading); font-weight: 600; margin-top: 4px; }
+  .more:hover { color: var(--accent); }
+  .more span { transition: transform 0.2s; }
+  .more:hover span { transform: translateX(4px); }
 
-  footer { padding: 36px 0 48px; color: var(--muted); font-size: 0.88rem; border-top: 1px solid var(--faint); }
+  .plain-list { list-style: none; }
+  .plain-list li { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2px 16px; padding: 10px 0; border-bottom: 1px solid var(--card-border); font-size: 0.94rem; }
+  .plain-list li:last-child { border-bottom: none; }
+  .plain-list .right { color: var(--muted); font-size: 0.88rem; }
+  .plain-list strong { color: var(--heading); font-weight: 500; }
+  .skills-grid { display: grid; grid-template-columns: 130px 1fr; gap: 10px 20px; font-size: 0.94rem; }
+  .skills-grid dt { color: var(--heading); font-weight: 500; }
 
-  @media (max-width: 640px) {
-    .topbar nav { display: none; }
-    .intro { padding-top: 48px; }
-    .intro h1 { font-size: 1.9rem; }
-    .skills { grid-template-columns: 1fr; gap: 2px; }
-    .skills dd { margin-bottom: 10px; }
-    .project { grid-template-columns: 1fr; padding: 20px; gap: 18px; }
-    .project.flip .media { order: 0; }
-    .project .media { position: relative; top: 0; }
+  footer { font-size: 0.85rem; color: var(--muted); max-width: 440px; }
+  footer a { color: var(--text); font-weight: 500; }
+  footer a:hover { color: var(--accent); }
+
+  /* ---- phones and small tablets ---- */
+  @media (max-width: 1000px) {
+    .page { grid-template-columns: 1fr; gap: 0; padding: 0 24px; }
+    .side { position: static; height: auto; padding: 64px 0 24px; }
+    .toc { display: none; }
+    .side-bottom { margin-top: 28px; }
+    main { padding-top: 24px; }
+    main section { margin-bottom: 80px; scroll-margin-top: 16px; }
+    .mobile-heading {
+      display: block;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      margin: 0 -24px 20px;
+      padding: 14px 24px;
+      background: var(--bg);
+      color: var(--heading);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .entries:hover .entry { opacity: 1; }
+    .entry { margin: 0; padding: 0; }
+    .entries .entry:hover { background: none; border-color: transparent; }
+  }
+  @media (max-width: 560px) {
+    .side h1 { font-size: 2.3rem; }
+    .job, .project, .skills-grid { grid-template-columns: 1fr; }
+    .job { gap: 4px; }
+    .project .media { max-width: 360px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .glow { display: none; }
   }
 </style>
 </head>
 <body>
+<div class="glow" id="glow" aria-hidden="true"></div>
 
-<div class="topbar">
-  <div class="wrap">
-    <a class="name" href="#top">Hassnain Ali</a>
-    <nav aria-label="Sections">
-      <a href="#experience">Experience</a>
-      <a href="#projects">Projects</a>
-      <a href="#skills">Skills</a>
-      <a href="#education">Education</a>
-      <a href="#contact">Contact</a>
-    </nav>
-    <button class="theme-toggle" type="button" id="themeToggle" aria-label="Switch colour theme">Light mode</button>
-  </div>
+<div class="page">
+
+  <!-- ===================== left, fixed ===================== -->
+  <header class="side">
+    <div>
+      <h1><a href="#about">Hassnain Ali</a></h1>
+      <p class="title">Full Stack Developer · Java &amp; Angular</p>
+      <p class="blurb">I build web apps with Java and Angular. Based in Doha, open to relocating.</p>
+
+      <nav aria-label="Sections">
+        <ul class="toc">
+          <li><a href="#about" class="active">About</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#education">Education</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="side-bottom">
+      <ul class="socials" aria-label="Elsewhere">
+        <li><a href="https://github.com/Hktheone" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
+        </a></li>
+        <li><a href="https://www.linkedin.com/in/hassnain-ali-4b398717a/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg>
+        </a></li>
+        <li><a href="mailto:khasnainali@gmail.com" aria-label="Email" title="khasnainali@gmail.com">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 5.5A2.5 2.5 0 0 1 4.5 3h15A2.5 2.5 0 0 1 22 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 18.5v-13Zm2.3-.5 7.7 6.2L19.7 5H4.3ZM20 6.7l-7.37 5.94a1 1 0 0 1-1.26 0L4 6.7v11.8c0 .28.22.5.5.5h15a.5.5 0 0 0 .5-.5V6.7Z"/></svg>
+        </a></li>
+        <li><a href="tel:+97472257091" aria-label="Phone" title="+974 7225 7091">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1L6.6 10.8Z"/></svg>
+        </a></li>
+      </ul>
+      <button class="theme-toggle" type="button" id="themeToggle" aria-label="Switch colour theme">Light mode</button>
+    </div>
+  </header>
+
+  <!-- ===================== right, scrolling ===================== -->
+  <main>
+
+    <section id="about" class="about" aria-label="About">
+      <h2 class="mobile-heading">About</h2>
+      <p>I'm a developer with about five years of experience, mostly <strong>Java</strong> on the backend and <strong>Angular</strong> on the front end.</p>
+      <p>Today I work on <a class="inline" href="https://www.ecustoms.gov.qa/qccswui/#/home" target="_blank" rel="noopener">Al Nadeeb</a>, Qatar's customs clearance system. Before that I spent three years on <a class="inline" href="https://www.jonasmetals.com/software" target="_blank" rel="noopener">iMetal</a>, an ERP for metal companies in the UK.</p>
+      <p>In my spare time I build side projects to learn new things, currently Kafka, Docker and CI/CD.</p>
+    </section>
+
+    <section id="experience" aria-label="Experience">
+      <h2 class="mobile-heading">Experience</h2>
+      <ol class="entries">
+
+        <li><div class="entry job">
+          <div class="when">2025 — Now</div>
+          <div>
+            <div class="job-head">
+              <img class="logo" src="alnadeeb-logo.png" alt="Al Nadeeb logo" onerror="this.remove()">
+              <h3>Full Stack Developer · <a class="org" href="https://www.ecustoms.gov.qa/qccswui/#/home" target="_blank" rel="noopener">General Authority of Customs (GAQ)</a></h3>
+            </div>
+            <div class="sub">Through Malomatia · Doha, Qatar</div>
+            <p>Qatar's customs system, used at every border to clear goods and collect duties.</p>
+            <ul class="points">
+              <li>Build REST APIs in Java EE for cargo tracking, documents and clearance.</li>
+              <li>Made database queries about 20% faster (Hibernate, Oracle).</li>
+              <li>Build role-based Angular screens that made navigation about 20% more efficient.</li>
+            </ul>
+            <div class="links-row">
+              <a href="https://www.ecustoms.gov.qa/qccswui1/#/auth/login" target="_blank" rel="noopener">Al Nadeeb e-Service ↗</a>
+            </div>
+            <ul class="pills" aria-label="Technologies used">
+              <li>Java EE</li><li>JAX-RS</li><li>Hibernate</li><li>Oracle</li><li>Angular</li><li>JWT</li>
+            </ul>
+          </div>
+        </div></li>
+
+        <li><div class="entry job">
+          <div class="when">2022 — 2025</div>
+          <div>
+            <div class="job-head">
+              <img class="logo" src="imetal-logo.png" alt="iMetal logo" onerror="this.remove()">
+              <h3>Software Developer · <a class="org" href="https://www.jonasmetals.com/software" target="_blank" rel="noopener">Jonas Metals (iMetal)</a></h3>
+            </div>
+            <div class="sub">Contour Software, part of Constellation · Karachi, Pakistan</div>
+            <p>An ERP for metal companies, covering sales, orders, processing and the warehouse.</p>
+            <ul class="points">
+              <li>Built backend features in Spring Boot services, using REST, gRPC and Kafka.</li>
+              <li>Worked with Spring Cloud (Eureka, gateway) and Spring Security with JWT.</li>
+              <li>Built large Angular screens with PrimeNG, and wrote tests with Jest and Playwright.</li>
+            </ul>
+            <ul class="pills" aria-label="Technologies used">
+              <li>Spring Boot</li><li>Spring Cloud</li><li>Kafka</li><li>gRPC</li><li>PostgreSQL</li><li>Angular</li><li>PrimeNG</li><li>Playwright</li>
+            </ul>
+          </div>
+        </div></li>
+
+        <li><div class="entry job">
+          <div class="when">Mar — Jul 2022</div>
+          <div>
+            <h3>DevOps Trainee · <span class="org">SkipQ</span></h3>
+            <div class="sub">Remote · Islamabad, Pakistan</div>
+            <p>A training programme after graduating, where I learned the basics of AWS and infrastructure as code.</p>
+            <ul class="pills" aria-label="Technologies used">
+              <li>AWS</li><li>CloudFormation</li><li>IaC</li>
+            </ul>
+          </div>
+        </div></li>
+      </ol>
+    </section>
+
+    <section id="projects" aria-label="Projects">
+      <h2 class="mobile-heading">Projects</h2>
+      <ul class="entries">
+
+        <li><div class="entry project">
+          <div class="media">
+            <svg class="diagram" viewBox="0 0 400 300" role="img" aria-label="TrackFlow: a gateway in front of an order service and a delivery service that talk through Kafka">
+              <rect class="box" x="120" y="22" width="160" height="50" rx="10"/><text x="200" y="54">Gateway</text>
+              <path class="line" d="M160 72 L105 112 M240 72 L295 112"/>
+              <rect class="box" x="30" y="112" width="150" height="50" rx="10"/><text x="105" y="144">Orders</text>
+              <rect class="box" x="220" y="112" width="150" height="50" rx="10"/><text x="295" y="144">Delivery</text>
+              <path class="dash" d="M105 162 V206 M295 162 V206"/>
+              <rect class="bus" x="30" y="206" width="340" height="50" rx="25"/><text class="hot" x="200" y="238">Kafka</text>
+            </svg>
+          </div>
+          <div>
+            <h3><a href="https://github.com/Hktheone/TrackFlow" target="_blank" rel="noopener">TrackFlow</a></h3>
+            <p>An order and delivery app. Customers order, riders deliver, and you can follow the rider live on a map.</p>
+            <ul class="points">
+              <li>Separate services that talk to each other through Kafka.</li>
+              <li>Login with three roles: admin, customer and rider.</li>
+              <li>Runs with one command using Docker.</li>
+            </ul>
+            <div class="links-row">
+              <a href="https://github.com/Hktheone/TrackFlow/blob/main/docs/ARCHITECTURE.md" target="_blank" rel="noopener">How it's built ↗</a>
+            </div>
+            <ul class="pills" aria-label="Technologies used">
+              <li>Java 21</li><li>Spring Boot</li><li>Kafka</li><li>PostgreSQL</li><li>Angular</li><li>Docker</li>
+            </ul>
+          </div>
+        </div></li>
+
+        <li><div class="entry project">
+          <div class="media">
+            <img src="spacewars.gif" alt="Space Wars being played, with the thread pool sidebar" loading="lazy">
+          </div>
+          <div>
+            <h3><a href="https://github.com/Hktheone/space-wars" target="_blank" rel="noopener">Space Wars</a></h3>
+            <p>A Space Invaders-style game that shows how Java threads work. Every enemy and bullet runs on a thread pool, and a sidebar shows the threads live as you play.</p>
+            <ul class="pills" aria-label="Technologies used">
+              <li>Java 21</li><li>Concurrency</li><li>Swing</li>
+            </ul>
+          </div>
+        </div></li>
+
+        <li><div class="entry project">
+          <div class="media">
+            <img src="quakewatch.png" alt="QuakeWatch dashboard with earthquakes on a 3D globe" loading="lazy">
+          </div>
+          <div>
+            <h3><a href="https://github.com/Hktheone/quake-watch" target="_blank" rel="noopener">QuakeWatch</a></h3>
+            <p>A live dashboard that shows every earthquake from the last 24 hours on a 3D globe. It updates every minute, and you can filter by size or region.</p>
+            <ul class="pills" aria-label="Technologies used">
+              <li>Angular</li><li>Signals</li><li>RxJS</li><li>globe.gl</li>
+            </ul>
+          </div>
+        </div></li>
+
+        <li><div class="entry project">
+          <div class="media">
+            <svg class="diagram" viewBox="0 0 400 300" role="img" aria-label="Microservices example: Nginx in front of an order service and an inventory service, connected over REST and through Kafka">
+              <rect class="box" x="130" y="22" width="140" height="50" rx="10"/><text x="200" y="54">Nginx</text>
+              <path class="line" d="M165 72 L105 112 M235 72 L295 112"/>
+              <rect class="box" x="30" y="112" width="150" height="50" rx="10"/><text x="105" y="144">Orders</text>
+              <rect class="box" x="220" y="112" width="150" height="50" rx="10"/><text x="295" y="144">Inventory</text>
+              <path class="line" d="M180 137 H220"/>
+              <path class="dash" d="M105 162 V206 M295 162 V206"/>
+              <rect class="bus" x="30" y="206" width="340" height="50" rx="25"/><text class="hot" x="200" y="238">Kafka</text>
+            </svg>
+          </div>
+          <div>
+            <h3><a href="https://github.com/Hktheone/micro-service-example" target="_blank" rel="noopener">Microservices example</a></h3>
+            <p>A smaller learning project with two services, orders and inventory, connected through REST and Kafka.</p>
+            <ul class="pills" aria-label="Technologies used">
+              <li>Spring Boot</li><li>Kafka</li><li>Resilience4j</li><li>Nginx</li>
+            </ul>
+          </div>
+        </div></li>
+      </ul>
+      <a class="more" href="https://github.com/Hktheone" target="_blank" rel="noopener">More on GitHub <span>→</span></a>
+    </section>
+
+    <section id="education" aria-label="Education and skills">
+      <h2 class="mobile-heading">Education</h2>
+      <ul class="plain-list">
+        <li><span><strong>BS Software Engineering</strong>, IBA University Sukkur</span><span class="right">2018 – 2021</span></li>
+        <li><span>IELTS Academic, C1 (7.5)</span><span class="right">British Council, 2023</span></li>
+        <li><span>Mid-Level Angular Developer</span><span class="right">Certificates.dev, 2025</span></li>
+        <li><span>Introduction to Data Science in Python</span><span class="right">Coursera, 2023</span></li>
+        <li><span>Using Python to Access Web Data</span><span class="right">Coursera, 2022</span></li>
+        <li><span>Spring Boot and Spring Mastery</span><span class="right">Udemy, 2022</span></li>
+      </ul>
+      <dl class="skills-grid" style="margin-top: 40px;">
+        <dt>Most used</dt><dd>Java, Spring Boot, Java EE, Angular, TypeScript, PostgreSQL, Oracle</dd>
+        <dt>Also</dt><dd>REST, gRPC, Kafka, Spring Security, Hibernate, RxJS, PrimeNG, Playwright</dd>
+        <dt>Learning</dt><dd>Docker, CI/CD, AWS</dd>
+      </dl>
+    </section>
+
+    <footer>
+      <p>Built by hand with HTML, CSS and a little JavaScript. The two-column layout is inspired by <a href="https://brittanychiang.com" target="_blank" rel="noopener">Brittany Chiang</a>'s portfolio.</p>
+    </footer>
+  </main>
 </div>
-
-<header class="intro" id="top">
-  <div class="wrap">
-    <h1>Hassnain Ali</h1>
-    <p class="role">Full stack developer · Java &amp; Angular · Doha, Qatar</p>
-    <p>I've been building enterprise software for about five years, mostly on the backend in <strong>Java</strong> (Spring Boot and Java EE) and on the front end in <strong>Angular</strong>.</p>
-    <p>Right now I work on <strong>Al Nadeeb</strong>, Qatar's customs clearance system. Before that I spent three years on <strong>iMetal</strong>, an ERP for metal companies in the UK, which is also where I got my first real experience working on microservices.</p>
-    <p>I'm open to new roles and can relocate with visa sponsorship.</p>
-    <div class="contact">
-      <a href="mailto:khasnainali@gmail.com">khasnainali@gmail.com</a>
-      <a href="tel:+97472257091">+974 7225 7091</a>
-      <a href="https://www.linkedin.com/in/hassnain-ali-4b398717a/" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="https://github.com/Hktheone" target="_blank" rel="noopener">GitHub</a>
-    </div>
-  </div>
-</header>
-
-<section id="experience">
-  <div class="wrap">
-    <h2>Experience</h2>
-
-    <div class="job">
-      <div class="job-top">
-        <h3>Full Stack Developer</h3>
-        <span class="when">Sep 2025 – now</span>
-      </div>
-      <div class="where">General Authority of Customs (GAQ), through Malomatia · Doha</div>
-      <div class="live-links">
-        <a href="https://www.ecustoms.gov.qa/qccswui/#/home" target="_blank" rel="noopener">Al Nadeeb ↗</a>
-        <a href="https://www.ecustoms.gov.qa/qccswui1/#/auth/login" target="_blank" rel="noopener">Al Nadeeb e-Service ↗</a>
-      </div>
-      <p>Al Nadeeb is the system Qatar uses to clear goods through customs at its land, sea and air borders. Brokers, importers and exporters file declarations and manifests in it, pay duties and follow their shipments, and several ministries are connected to it as well. Because clearance time affects how fast goods get into the country, slow queries or broken permissions are noticed quickly.</p>
-      <p>I work on both sides of it:</p>
-      <ul>
-        <li>REST APIs in Java EE (Servlets, JAX-RS/Jersey) for cargo tracking, document processing and clearance, some of them used by other government and partner systems.</li>
-        <li>Reworked parts of the Hibernate/JPA layer on Oracle, along with HQL and native queries, which cut query times by about 20%.</li>
-        <li>Put modern APIs in front of older modules so those processes need less manual work.</li>
-        <li>On the front end, role-based screens in Angular 12+ with Angular Bootstrap. Menus and access depend on who's logged in, which made navigation about 20% more efficient.</li>
-        <li>JWT authentication, route guards and session handling, plus reusable components and reactive forms for the long data-entry screens.</li>
-      </ul>
-      <p class="stack"><b>Stack:</b> Java EE, JAX-RS (Jersey), Hibernate/JPA, Oracle, Angular 12+, Angular Bootstrap, JWT</p>
-    </div>
-
-    <div class="job">
-      <div class="job-top">
-        <h3>Software Developer</h3>
-        <span class="when">Sep 2022 – Sep 2025</span>
-      </div>
-      <div class="where">Contour Software (Constellation) · Karachi, working on iMetal for Jonas Metals UK</div>
-      <div class="live-links">
-        <a href="https://www.jonasmetals.com/software" target="_blank" rel="noopener">Jonas Metals software ↗</a>
-      </div>
-      <p>iMetal is an ERP for the metals trade: stockholders, service centres, traders and processors. It covers quoting, orders, cutting and processing (including offcuts and yield), warehouse work and stock traceability, and it passes data on to finance. Metal stock is fiddly to model, because every piece has a grade, dimensions, a condition and a location, and the numbers have to agree across sales, processing and the warehouse.</p>
-      <p>I worked there as a Java backend and Angular developer. The product is split into Spring Boot services behind a gateway, so this is where I learned how a microservices setup works day to day.</p>
-      <ul>
-        <li>Built and maintained features in Spring Boot services, with REST and gRPC APIs between services and to the front end.</li>
-        <li>Worked with the Spring Cloud setup (Eureka, the API gateway, load balancing) and configured it for the services I was working on.</li>
-        <li>Used Kafka and Reactive Feign for communication between services, and Spring Security with JWT for authentication and roles.</li>
-        <li>Tuned data access with Spring Data JPA, Hibernate and caching on PostgreSQL and MySQL.</li>
-        <li>Built large Angular (2–16) screens with PrimeNG and Angular Material, using RxJS and signals for real-time updates and lazy loading and AOT to keep load times down.</li>
-        <li>Wrote tests with Jasmine, Karma and Jest, and UI automation with Playwright. The team was spread across time zones and worked in Scrum.</li>
-      </ul>
-      <p class="stack"><b>Stack:</b> Spring Boot, Spring Cloud, Kafka, gRPC, Spring Security, JPA/Hibernate, PostgreSQL, MySQL, Angular, PrimeNG, Playwright</p>
-    </div>
-
-    <div class="job">
-      <div class="job-top">
-        <h3>DevOps Trainee</h3>
-        <span class="when">Mar 2022 – Jul 2022</span>
-      </div>
-      <div class="where">SkipQ · remote, Islamabad</div>
-      <p>A training programme I joined after graduating. It was my introduction to AWS (Lambda, S3, CloudFormation, CloudWatch), infrastructure as code and basic CI. I still think of this as an area I'm growing in rather than a specialty.</p>
-    </div>
-  </div>
-</section>
-
-<section id="projects">
-  <div class="wrap wide">
-    <h2>Projects</h2>
-    <p>Things I've built in my own time, mostly to try out ideas I don't get to use at work. All of the code is on <a href="https://github.com/Hktheone" target="_blank" rel="noopener">GitHub</a>.</p>
-
-    <article class="project">
-      <div class="media">
-        <svg class="diagram" viewBox="0 0 400 250" role="img" aria-label="TrackFlow architecture: the Angular app talks to the API gateway, which routes to the order and delivery services; they exchange events through Kafka and each has its own database">
-          <rect class="box" x="150" y="14" width="100" height="28" rx="6"/><text x="200" y="32">Angular app</text>
-          <path class="line" d="M200 42 V60"/>
-          <rect class="box" x="120" y="60" width="160" height="34" rx="6"/><text x="200" y="76">API gateway</text><text class="small" x="200" y="88">login · JWT · routing</text>
-          <path class="line" d="M165 94 L105 116 M235 94 L295 116"/>
-          <rect class="box" x="40" y="116" width="130" height="34" rx="6"/><text x="105" y="137">order-service</text>
-          <rect class="box" x="230" y="116" width="130" height="34" rx="6"/><text x="295" y="137">delivery-service</text>
-          <path class="accent-line" d="M105 150 V172 M295 150 V172"/>
-          <text class="small" x="155" y="166">ORDER_CONFIRMED</text><text class="small" x="248" y="166">status updates</text>
-          <rect class="busfill" x="40" y="172" width="320" height="26" rx="13"/><text class="hot" x="200" y="189">Kafka</text>
-          <path class="line" d="M48 150 Q14 190 72 222 M352 150 Q386 190 328 222"/>
-          <ellipse class="db" cx="105" cy="226" rx="36" ry="11"/><text class="small" x="105" y="229">orders DB</text>
-          <ellipse class="db" cx="295" cy="226" rx="40" ry="11"/><text class="small" x="295" y="229">deliveries DB</text>
-        </svg>
-      </div>
-      <div class="body">
-        <h3>TrackFlow</h3>
-        <p class="stack">Java 21, Spring Boot 4, Spring Cloud Gateway, Eureka, Kafka, PostgreSQL, Angular 22, Docker</p>
-        <p>An order and delivery system: customers place orders, riders deliver them while showing up live on a map, and an admin can see everything. I built it to get more practice with microservices, Kafka and Docker than I'd had at work, and it's the biggest thing I've made on my own.</p>
-        <ul>
-          <li>The order and delivery services each have their own PostgreSQL database and never call each other directly. Everything between them goes through Kafka events.</li>
-          <li>Login lives in the gateway: hashed passwords, signed JWTs, and a logout that really invalidates the token. There are three roles (admin, customer, rider), and each service checks that you own what you're asking for.</li>
-          <li>I spent time on the failure cases: events are only sent after the database commit, a duplicate event can't break anything, and messages that keep failing go to a dead-letter topic.</li>
-          <li>The front end is Angular 22 with signals. Riders can share their phone's GPS while delivering.</li>
-          <li>The whole thing, including databases, Kafka and the front end, starts with one <code>docker compose up</code>.</li>
-        </ul>
-        <div class="links">
-          <a href="https://github.com/Hktheone/TrackFlow" target="_blank" rel="noopener">Code</a>
-          <a href="https://github.com/Hktheone/TrackFlow/blob/main/docs/ARCHITECTURE.md" target="_blank" rel="noopener">How it's built</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="project flip">
-      <div class="media">
-        <img src="spacewars.gif" alt="Space Wars being played, with the thread pool sidebar on the right" loading="lazy">
-      </div>
-      <div class="body">
-        <h3>Space Wars</h3>
-        <p class="stack">Java 21, java.util.concurrent, Swing, Maven</p>
-        <p>A small Space Invaders clone I made to actually <em>see</em> how a Java thread pool behaves. Every enemy and every bullet is a task on a <code>ThreadPoolExecutor</code>, and the sidebar shows what each worker thread is doing while you play.</p>
-        <ul>
-          <li>There are two bounded pools, one for enemies and one for bullets. Make a pool smaller with its slider and you can watch the queue fill up, then new enemies get rejected outright.</li>
-          <li>Blue enemies freeze when you hit them. Their thread really is asleep (<code>TIMED_WAITING</code>) until you hit them again or they thaw after five seconds.</li>
-          <li>All the numbers in the sidebar come from the executor itself (active count, queue size, completed, rejected), so you can also watch idle threads time out and shut down.</li>
-        </ul>
-        <div class="links">
-          <a href="https://github.com/Hktheone/space-wars" target="_blank" rel="noopener">Code</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="project">
-      <div class="media">
-        <img src="quakewatch.png" alt="QuakeWatch dashboard with earthquakes plotted on a 3D globe" loading="lazy">
-      </div>
-      <div class="body">
-        <h3>QuakeWatch</h3>
-        <p class="stack">Angular, TypeScript, RxJS, signals, globe.gl</p>
-        <p>A live dashboard that puts every earthquake from the last 24 hours on a 3D globe, using the public USGS feed.</p>
-        <ul>
-          <li>The feed refreshes every minute through one shared stream, so the whole app makes a single request.</li>
-          <li>The stats on top (count, strongest, average magnitude, regions) are all computed from one signal.</li>
-          <li>Quakes are coloured and sized by magnitude, and you can filter by size or region.</li>
-        </ul>
-        <div class="links">
-          <a href="https://github.com/Hktheone/quake-watch" target="_blank" rel="noopener">Code</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="project flip">
-      <div class="media">
-        <svg class="diagram" viewBox="0 0 400 250" role="img" aria-label="Microservices example: Nginx in front of an order service and an inventory service, which talk over REST with a circuit breaker and through Kafka; data in PostgreSQL and metrics in Prometheus">
-          <rect class="box" x="150" y="16" width="100" height="30" rx="6"/><text x="200" y="35">Nginx</text>
-          <path class="line" d="M180 46 L110 84 M220 46 L290 84"/>
-          <rect class="box" x="45" y="84" width="130" height="36" rx="6"/><text x="110" y="106">order-service</text>
-          <rect class="box" x="225" y="84" width="130" height="36" rx="6"/><text x="290" y="106">inventory-service</text>
-          <path class="line" d="M175 102 H225"/><text class="small" x="200" y="96">REST</text><text class="small" x="200" y="116">circuit breaker</text>
-          <path class="accent-line" d="M110 120 V150 M290 120 V150"/>
-          <rect class="busfill" x="45" y="150" width="310" height="26" rx="13"/><text class="hot" x="200" y="167">Kafka</text>
-          <path class="line" d="M60 120 Q40 200 156 214 M340 120 Q360 160 246 212"/>
-          <ellipse class="db" cx="200" cy="214" rx="46" ry="11"/><text class="small" x="200" y="217">PostgreSQL</text>
-          <rect class="box" x="296" y="204" width="84" height="28" rx="6"/><text class="small" x="338" y="222">Prometheus</text>
-        </svg>
-      </div>
-      <div class="body">
-        <h3>Microservices example</h3>
-        <p class="stack">Java 21, Spring Boot 3.2, Kafka, PostgreSQL, Nginx, Resilience4j, Prometheus</p>
-        <p>An earlier and smaller learning project, with two services for orders and inventory.</p>
-        <ul>
-          <li>The order service checks stock with the inventory service over REST, behind a Resilience4j circuit breaker.</li>
-          <li>Once an order is created it publishes an event to Kafka.</li>
-          <li>Nginx sits in front of both services, and Prometheus collects their metrics.</li>
-        </ul>
-        <div class="links">
-          <a href="https://github.com/Hktheone/micro-service-example" target="_blank" rel="noopener">Code</a>
-        </div>
-      </div>
-    </article>
-  </div>
-</section>
-
-<section id="skills">
-  <div class="wrap">
-    <h2>Skills</h2>
-    <dl class="skills">
-      <dt>Most used</dt>
-      <dd>Java (8, 11, 17), Spring Boot, Spring, Java EE, Angular, TypeScript, PostgreSQL</dd>
-      <dt>Backend</dt>
-      <dd>REST, gRPC, Spring Security &amp; JWT, Spring Data JPA, Hibernate, JAX-RS, WebFlux, Kafka, Spring Cloud</dd>
-      <dt>Front end</dt>
-      <dd>Angular (2–16), RxJS &amp; signals, PrimeNG, Angular Material, AngularJS, some React</dd>
-      <dt>Databases</dt>
-      <dd>PostgreSQL, Oracle, MySQL</dd>
-      <dt>Testing</dt>
-      <dd>Jasmine, Karma, Jest, Playwright</dd>
-      <dt>Still learning</dt>
-      <dd>Docker, CI/CD and AWS. I use them in my projects, but I'm not an expert yet.</dd>
-      <dt>Other</dt>
-      <dd>Python, matplotlib, Power BI</dd>
-    </dl>
-  </div>
-</section>
-
-<section id="education">
-  <div class="wrap">
-    <h2>Education &amp; certificates</h2>
-    <div class="row">
-      <span><strong>BS Software Engineering</strong>, IBA University Sukkur</span>
-      <span>2018 – 2021</span>
-    </div>
-    <p style="color: var(--muted); font-size: 0.92rem; margin: 8px 0 18px;">Courses I still lean on: OOP in Java, data structures and algorithms, operating systems, enterprise apps with React and Node.js, machine learning, and big data with PySpark.</p>
-    <div class="row"><span>IELTS Academic, C1 (7.5)</span><span>British Council, 2023</span></div>
-    <div class="row"><span>Mid-Level Angular Developer</span><span>Certificates.dev, 2025</span></div>
-    <div class="row"><span>Introduction to Data Science in Python</span><span>Coursera, 2023</span></div>
-    <div class="row"><span>Using Python to Access Web Data</span><span>Coursera, 2022</span></div>
-    <div class="row"><span>Spring Boot and Spring Mastery</span><span>Udemy, 2022</span></div>
-  </div>
-</section>
-
-<section id="contact">
-  <div class="wrap">
-    <h2>Contact</h2>
-    <p>Email is the easiest way to reach me: <a href="mailto:khasnainali@gmail.com">khasnainali@gmail.com</a>. You can also find me on <a href="https://www.linkedin.com/in/hassnain-ali-4b398717a/" target="_blank" rel="noopener">LinkedIn</a>.</p>
-  </div>
-</section>
-
-<footer>
-  <div class="wrap">© 2026 Hassnain Ali</div>
-</footer>
 
 <script>
   (function () {
     var root = document.documentElement;
-    var button = document.getElementById('themeToggle');
 
+    // theme switch
+    var toggle = document.getElementById('themeToggle');
     function label() {
-      button.textContent = root.getAttribute('data-theme') === 'dark' ? 'Light mode' : 'Dark mode';
+      toggle.textContent = root.getAttribute('data-theme') === 'dark' ? 'Light mode' : 'Dark mode';
     }
-
-    button.addEventListener('click', function () {
+    toggle.addEventListener('click', function () {
       var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       root.setAttribute('data-theme', next);
       try { localStorage.setItem('theme', next); } catch (e) {}
       label();
     });
-
     label();
+
+    // light that follows the mouse (desktop only)
+    var glow = document.getElementById('glow');
+    if (window.matchMedia('(pointer: fine)').matches) {
+      window.addEventListener('mousemove', function (e) {
+        glow.style.background = 'radial-gradient(600px at ' + e.clientX + 'px ' + e.clientY + 'px, var(--glow), transparent 80%)';
+      });
+    }
+
+    // highlight the menu item for the section in view
+    var links = document.querySelectorAll('.toc a');
+    var sections = Array.prototype.map.call(links, function (a) { return document.querySelector(a.getAttribute('href')); });
+    function setActive() {
+      var current = sections[0];
+      sections.forEach(function (s) {
+        if (s && s.getBoundingClientRect().top <= window.innerHeight * 0.35) current = s;
+      });
+      if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 4) current = sections[sections.length - 1];
+      links.forEach(function (a) { a.classList.toggle('active', document.querySelector(a.getAttribute('href')) === current); });
+    }
+    window.addEventListener('scroll', setActive, { passive: true });
+    setActive();
   })();
 </script>
 </body>
