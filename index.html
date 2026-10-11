@@ -176,12 +176,12 @@
   .job-head { display: flex; align-items: center; gap: 12px; }
   .job-head .logo {
     flex: none;
-    width: 40px;
-    height: 40px;
+    width: 66px;
+    height: 44px;
     object-fit: contain;
     border-radius: 8px;
     background: #ffffff;
-    padding: 4px;
+    padding: 3px 5px;
     border: 1px solid var(--card-border);
   }
   .entry h3 .org { font-weight: 400; }
@@ -192,6 +192,15 @@
   .entry ul.points { margin: 10px 0 0 1.1em; font-size: 0.94rem; }
   .entry ul.points li { margin-bottom: 6px; }
   .entry ul.points li::marker { color: var(--accent); }
+  .part {
+    margin-top: 14px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--heading);
+  }
+  .part + ul.points { margin-top: 6px; }
   .links-row { margin-top: 10px; font-size: 0.9rem; display: flex; gap: 16px; flex-wrap: wrap; }
   .links-row a { color: var(--heading); font-weight: 500; }
   .links-row a:hover { color: var(--accent); }
@@ -338,15 +347,23 @@
           <div class="when">2025 — Now</div>
           <div>
             <div class="job-head">
-              <img class="logo" src="alnadeeb-logo.png" alt="Al Nadeeb logo" onerror="this.remove()">
+              <img class="logo" src="customs.jpg" alt="General Authority of Customs logo" onerror="this.remove()">
               <h3>Full Stack Developer · <a class="org" href="https://www.ecustoms.gov.qa/qccswui/#/home" target="_blank" rel="noopener">General Authority of Customs (GAQ)</a></h3>
             </div>
             <div class="sub">Through Malomatia · Doha, Qatar</div>
-            <p>Qatar's customs system, used at every border to clear goods and collect duties.</p>
+            <p>Qatar's customs system. Brokers and importers use it at every border to file declarations, pay duties and track shipments.</p>
+            <div class="part">Backend</div>
             <ul class="points">
-              <li>Build REST APIs in Java EE for cargo tracking, documents and clearance.</li>
-              <li>Made database queries about 20% faster (Hibernate, Oracle).</li>
-              <li>Build role-based Angular screens that made navigation about 20% more efficient.</li>
+              <li>Build REST APIs in Java EE (Servlets, JAX-RS) for cargo tracking, documents and clearance.</li>
+              <li>Some of these APIs are used by other government and partner systems.</li>
+              <li>Made database queries about 20% faster by improving Hibernate/JPA and Oracle queries.</li>
+              <li>Added modern APIs to older modules so less work is done by hand.</li>
+            </ul>
+            <div class="part">Frontend</div>
+            <ul class="points">
+              <li>Build Angular 12+ screens where menus and access depend on the user's role, which made navigation about 20% more efficient.</li>
+              <li>JWT login, route guards and session handling to keep pages secure.</li>
+              <li>Reusable components and reactive forms for long data-entry screens.</li>
             </ul>
             <div class="links-row">
               <a href="https://www.ecustoms.gov.qa/qccswui1/#/auth/login" target="_blank" rel="noopener">Al Nadeeb e-Service ↗</a>
@@ -361,15 +378,23 @@
           <div class="when">2022 — 2025</div>
           <div>
             <div class="job-head">
-              <img class="logo" src="imetal-logo.png" alt="iMetal logo" onerror="this.remove()">
+              <img class="logo" src="imetal.png" alt="iMetal logo" onerror="this.remove()">
               <h3>Software Developer · <a class="org" href="https://www.jonasmetals.com/software" target="_blank" rel="noopener">Jonas Metals (iMetal)</a></h3>
             </div>
             <div class="sub">Contour Software, part of Constellation · Karachi, Pakistan</div>
-            <p>An ERP for metal companies, covering sales, orders, processing and the warehouse.</p>
+            <p>An ERP for metal companies, covering quotes, orders, cutting and processing, the warehouse and stock tracking.</p>
+            <div class="part">Backend</div>
             <ul class="points">
-              <li>Built backend features in Spring Boot services, using REST, gRPC and Kafka.</li>
-              <li>Worked with Spring Cloud (Eureka, gateway) and Spring Security with JWT.</li>
-              <li>Built large Angular screens with PrimeNG, and wrote tests with Jest and Playwright.</li>
+              <li>Built features in Spring Boot services, with REST and gRPC APIs.</li>
+              <li>Worked with Spring Cloud (Eureka, API gateway) and used Kafka between services.</li>
+              <li>Secured services with Spring Security and JWT roles.</li>
+              <li>Improved database access with JPA, Hibernate and caching (PostgreSQL, MySQL).</li>
+            </ul>
+            <div class="part">Frontend</div>
+            <ul class="points">
+              <li>Built large Angular (2–16) screens with PrimeNG and Angular Material.</li>
+              <li>Used RxJS and signals for live updates, and lazy loading to keep pages fast.</li>
+              <li>Wrote tests with Jasmine, Jest and Playwright, working in Scrum with a team across time zones.</li>
             </ul>
             <ul class="pills" aria-label="Technologies used">
               <li>Spring Boot</li><li>Spring Cloud</li><li>Kafka</li><li>gRPC</li><li>PostgreSQL</li><li>Angular</li><li>PrimeNG</li><li>Playwright</li>
@@ -491,7 +516,7 @@
     </section>
 
     <footer>
-      <p>Built by hand with HTML, CSS and a little JavaScript. The two-column layout is inspired by <a href="https://brittanychiang.com" target="_blank" rel="noopener">Brittany Chiang</a>'s portfolio.</p>
+      <p>Built by hand with HTML, CSS and a little JavaScript</p>
     </footer>
   </main>
 </div>
